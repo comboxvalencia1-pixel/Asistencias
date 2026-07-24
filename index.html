@@ -80,11 +80,11 @@
     }
     .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; }
 
-    /* ===== ESCÁNER FACIAL COMPLETO ===== */
+    /* ESCÁNER FACIAL */
     .scanner-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.25rem; }
     .scanner-container {
       width: 190px; height: 190px; position: relative; border-radius: 50%;
-      overflow: visible; /* ← CRÍTICO: visible para que el anillo no se recorte */
+      overflow: visible;
     }
     .scanner-ring {
       position: absolute; inset: -5px; border-radius: 50%;
@@ -298,7 +298,7 @@
     }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    /* ===== MODAL DE ÉXITO ===== */
+    /* MODAL DE ÉXITO */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 9999;
       background: rgba(10,14,26,0.85); backdrop-filter: blur(12px);
@@ -366,7 +366,7 @@
       </div>
       <p class="subtitle">Verificación facial + registro de turno</p>
 
-      <!-- ESCÁNER FACIAL COMPLETO -->
+      <!-- ESCÁNER FACIAL (solo visual, no captura ni envía) -->
       <div class="scanner-wrapper">
         <div class="scanner-container" id="scannerContainer">
           <div class="scanner-ring"></div>
@@ -418,7 +418,7 @@
       <div id="statusMessage" class="status-msg"></div>
     </div>
 
-    <!-- ===== VISTA ADMIN (solo por URL) ===== -->
+    <!-- ===== VISTA ADMIN (solo por URL con key) ===== -->
     <div id="admin-view" class="view glass-panel">
       <div class="logo">
         <div class="logo-icon" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">⚡</div>
@@ -477,7 +477,7 @@
     </div>
   </div>
 
-  <!-- ===== MODAL DE ÉXITO ===== -->
+  <!-- ===== MODAL DE ÉXITO (foto de cédula del backend) ===== -->
   <div id="success-modal" class="modal-overlay">
     <div class="modal-card glass-panel">
       <div class="success-photo-container">
@@ -506,6 +506,9 @@
   <div id="toast" class="toast"></div>
 
   <script>
+    // ==========================================
+    // CONFIGURACIÓN
+    // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
     const ADMIN_KEY = "combox2026";
 
@@ -522,18 +525,18 @@
     document.addEventListener("DOMContentLoaded", async () => {
       createParticles();
       initRipple();
-      await cargarSedesRemotas(); // ← De Versión B (correcto)
+      await cargarSedesRemotas();
 
       const params = new URLSearchParams(window.location.search);
       if (params.get('admin') === 'true' && params.get('key') === ADMIN_KEY) {
         showView('admin-view');
         document.getElementById('dateFilter').valueAsDate = new Date();
         cargarDatosAdmin();
-        cargarReporteMensual(); // ← De Versión B (correcto)
+        cargarReporteMensual();
       } else {
         showView('employee-view');
         initCamera();
-        startScanSimulation(); // ← De Versión A (escaneo simulado)
+        startScanSimulation();
       }
     });
 
@@ -576,7 +579,7 @@
     }
 
     // ==========================================
-    // CÁMARA + ESCÁNER SIMULADO (de Versión A)
+    // CÁMARA EN VIVO (solo visual, NO captura)
     // ==========================================
     async function initCamera() {
       const video = document.getElementById('scannerVideo');
@@ -584,7 +587,8 @@
       const txt = document.getElementById('scannerText');
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 400 }, height: { ideal: 400 } }, audio: false
+          video: { facingMode: 'user', width: { ideal: 400 }, height: { ideal: 400 } },
+          audio: false
         });
         video.srcObject = stream;
         await video.play();
@@ -614,24 +618,8 @@
       }, 4500);
     }
 
-    // Captura foto del video (de Versión A)
-    function capturarFoto() {
-      const video = document.getElementById('scannerVideo');
-      if (!video.videoWidth) return null;
-      const canvas = document.createElement('canvas');
-      const size = Math.min(video.videoWidth, video.videoHeight);
-      canvas.width = 400; canvas.height = 400;
-      const ctx = canvas.getContext('2d');
-      const sx = (video.videoWidth - size) / 2;
-      const sy = (video.videoHeight - size) / 2;
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(video, sx, sy, size, size, 0, 0, canvas.width, canvas.height);
-      return canvas.toDataURL('image/jpeg', 0.85);
-    }
-
     // ==========================================
-    // SEDES REMOTAS (de Versión B - correcto)
+    // SEDES REMOTAS
     // ==========================================
     async function cargarSedesRemotas() {
       try {
@@ -688,8 +676,20 @@
       m.className = 'status-msg ' + clase;
     }
 
-        // ==========================================
-    // MARCAR ASISTENCIA (Envía foto y cédula)
+    function mostrarEstadoActivo(msg) {
+      document.getElementById('statusCard').style.display = 'block';
+      document.getElementById('statusText').textContent = msg || 'En turno activo';
+      document.getElementById('statusTime').textContent =
+        new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function finalizarCarga() {
+      document.getElementById('btnText').style.display = 'block';
+      document.getElementById('btnLoader').style.display = 'none';
+    }
+
+    // ==========================================
+    // MARCAR ASISTENCIA (SIN foto en payload)
     // ==========================================
     async function marcarAsistencia() {
       const cedula = document.getElementById('cedulaInput').value.trim();
@@ -715,18 +715,15 @@
         const sede = detectarSedeCercana(lat, lng);
         if (sede) mostrarSedeUI(sede.nombre, sede.distancia);
 
-        const fotoCapturadaEnVivo = capturarFoto();
-
         mostrarMensaje('⏳ Registrando...', '');
 
         const payload = {
-          action: "marcar", 
-          cedula, 
-          latitud: lat, 
+          action: "marcar",
+          cedula: cedula,
+          latitud: lat,
           longitud: lng,
           sede: sede ? sede.nombre : '',
-          sedeId: sede ? sede.id : null,
-          foto: fotoCapturadaEnVivo
+          sedeId: sede ? sede.id : null
         };
 
         try {
@@ -741,9 +738,7 @@
           if (data.success) {
             document.getElementById('cedulaInput').value = '';
             mostrarEstadoActivo(data.message);
-            
-            // Pasamos los datos del backend (que incluyen data.foto_cedula) y la foto en vivo
-            showSuccessModal(data, fotoCapturadaEnVivo);
+            showSuccessModal(data);
             launchConfetti();
           } else {
             showToast(data.message, 'error');
@@ -752,7 +747,7 @@
         } catch (e) {
           finalizarCarga();
           mostrarEstadoActivo('Asistencia registrada');
-          showSuccessModal({ message: 'Registrado (sin conexión)', sede: sede?.nombre }, fotoCapturadaEnVivo);
+          showSuccessModal({ message: 'Registrado (sin conexión)', sede: sede ? sede.nombre : '' });
           launchConfetti();
         }
       }, () => {
@@ -762,27 +757,21 @@
     }
 
     // ==========================================
-    // MODAL DE ÉXITO (Prioriza la FOTO DE LA CÉDULA)
+    // MODAL DE ÉXITO (solo foto de cédula del backend)
     // ==========================================
-    function showSuccessModal(data, fotoEnVivo) {
+    function showSuccessModal(data) {
       const modal = document.getElementById('success-modal');
       const photo = document.getElementById('successPhoto');
       const placeholder = document.getElementById('successPhotoPlaceholder');
 
-      // 🥇 PRIORIDAD 1: Mostrar la foto oficial de la cédula del Excel (ej: Empleados_Images/...)
-      if (data.foto_cedula && data.foto_cedula.trim() !== "") {
-        photo.src = data.foto_cedula;
+      const fotoUrl = data.foto_cedula || '';
+      const esUrlValida = fotoUrl.startsWith('http://') || fotoUrl.startsWith('https://');
+
+      if (esUrlValida) {
+        photo.src = fotoUrl;
         photo.style.display = 'block';
         placeholder.style.display = 'none';
-      } 
-      // 🥈 PRIORIDAD 2: Si no tiene foto en el Excel, mostrar la foto tomada por la cámara en vivo
-      else if (fotoEnVivo) {
-        photo.src = fotoEnVivo;
-        photo.style.display = 'block';
-        placeholder.style.display = 'none';
-      } 
-      // ❌ Fallback si no hay ninguna
-      else {
+      } else {
         photo.style.display = 'none';
         placeholder.style.display = 'grid';
       }
@@ -796,13 +785,12 @@
       setTimeout(() => closeSuccessModal(), 7000);
     }
 
-
     function closeSuccessModal() {
       document.getElementById('success-modal').classList.remove('show');
     }
 
     // ==========================================
-    // CONFETTI (de Versión A)
+    // CONFETTI
     // ==========================================
     function launchConfetti() {
       const colors = ['#10f5a5','#22d3ee','#a855f7','#ec4899','#fbbf24','#f87171','#34d399','#818cf8'];
@@ -825,7 +813,7 @@
     }
 
     // ==========================================
-    // ADMIN (de Versión B - correcto)
+    // ADMIN
     // ==========================================
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -887,7 +875,6 @@
       }).join('');
     }
 
-    // Reporte mensual para calendario (de Versión B)
     async function cargarReporteMensual() {
       try {
         const res = await fetch(`${API_URL}?action=getReporteMensual&month=${currentMonth+1}&year=${currentYear}`);
