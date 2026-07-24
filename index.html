@@ -2,260 +2,596 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Combox - Asistencia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* VARIABLES MODO CLARO Y VERDE */
     :root {
-      --bg-light: #f0f4f8;
-      --accent-green: #10b981; 
-      --accent-green-hover: #059669; 
-      --text-dark: #1e293b;
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1f2937;
+      --bg-card: rgba(30, 41, 59, 0.6);
+      --accent-green: #10f5a5;
+      --accent-cyan: #22d3ee;
+      --accent-purple: #a855f7;
+      --accent-pink: #ec4899;
+      --accent-gold: #fbbf24;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
       --text-muted: #64748b;
-      --panel-bg: rgba(255, 255, 255, 0.85);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --glow-green: 0 0 30px rgba(16, 245, 165, 0.4);
     }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+
     body {
-      background-color: var(--bg-light);
-      color: var(--text-dark);
+      background: var(--bg-primary);
+      background-image:
+        radial-gradient(at 20% 20%, rgba(16, 245, 165, 0.07) 0px, transparent 50%),
+        radial-gradient(at 80% 80%, rgba(168, 85, 247, 0.07) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(34, 211, 238, 0.04) 0px, transparent 50%);
+      color: var(--text-primary);
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      position: relative;
+      align-items: flex-start;
+      padding: 1rem;
+      overflow-x: hidden;
     }
 
-    #app { width: 90%; max-width: 450px; z-index: 10; }
-
-    /* VISTAS */
-    .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
-    .view.active { display: block; opacity: 1; animation: fadeIn 0.5s ease forwards; }
-
-    @keyframes fadeIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    .bg-particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .particle {
+      position: absolute; width: 3px; height: 3px;
+      border-radius: 50%; opacity: 0.25;
+      animation: floatUp 18s infinite linear;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.25; }
+      90% { opacity: 0.25; }
+      100% { transform: translateY(-100vh) translateX(80px); opacity: 0; }
     }
 
-    /* PANELES */
+    #app { width: 100%; max-width: 460px; z-index: 10; padding-top: 0.5rem; }
+
+    .view { display: none; opacity: 0; }
+    .view.active { display: block; animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideIn {
+      from { transform: translateY(30px) scale(0.98); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    /* GLASSMORPHISM */
     .glass-panel {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 1);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      background: var(--bg-card);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--border-glass);
+      border-radius: 28px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      position: relative; overflow: hidden;
     }
 
-    h1 { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; font-weight: 800; }
-    h1 span { color: var(--accent-green); }
+    .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      border-radius: 12px; display: grid; place-items: center;
+      font-weight: 700; color: #0a0e1a; box-shadow: var(--glow-green);
+      font-size: 1.1rem;
+    }
+    h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+    h1 .accent {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; }
+
+    /* ESCÁNER FACIAL */
+    .scanner-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.25rem; }
+    .scanner-container {
+      width: 190px; height: 190px;
+      position: relative; border-radius: 50%;
+      overflow: hidden;
+    }
+    .scanner-ring {
+      position: absolute; inset: -5px; border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent-green), var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-green));
+      animation: ringRotate 3s linear infinite;
+      z-index: 0;
+    }
+    @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+    .scanner-inner {
+      position: absolute; inset: 3px; border-radius: 50%;
+      overflow: hidden; z-index: 1; background: var(--bg-secondary);
+    }
+    #scannerVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
+    .scanner-placeholder { width: 100%; height: 100%; display: grid; place-items: center; background: var(--bg-tertiary); color: var(--text-muted); font-size: 3rem; }
+
+    .scan-line {
+      position: absolute; left: 12%; width: 76%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+      box-shadow: 0 0 12px var(--accent-green);
+      z-index: 3; animation: scanMove 2.8s ease-in-out infinite;
+    }
+    @keyframes scanMove {
+      0%, 100% { top: 12%; opacity: 0.6; }
+      50% { top: 88%; opacity: 1; }
+    }
+
+    .scanner-grid {
+      position: absolute; inset: 0; z-index: 2; border-radius: 50%;
+      background-image: linear-gradient(rgba(16,245,165,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(16,245,165,0.06) 1px, transparent 1px);
+      background-size: 20px 20px; pointer-events: none;
+    }
+
+    .scanner-status {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary);
+      padding: 6px 16px; background: var(--bg-tertiary);
+      border-radius: 20px; border: 1px solid var(--border-glass);
+    }
+    .scanner-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* SEDE INDICATOR */
+    .sede-indicator {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.2);
+      border-radius: 14px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: var(--accent-cyan);
+    }
+    .sede-indicator .sede-dist { color: var(--text-muted); font-size: 0.75rem; margin-left: auto; }
 
     /* INPUTS */
     .neu-input {
-      width: 100%;
-      padding: 1rem 1.5rem;
-      background: #e2e8f0;
-      border: none;
-      border-radius: 12px;
-      color: var(--text-dark);
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-      outline: none;
-      box-shadow: inset 4px 4px 8px #cbd5e1, inset -4px -4px 8px #ffffff;
+      width: 100%; padding: 0.95rem 1.4rem;
+      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
+      border-radius: 16px; color: var(--text-primary); font-size: 1rem; font-family: inherit;
+      margin-bottom: 1rem; outline: none;
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.5), inset -4px -4px 8px rgba(255,255,255,0.03);
       transition: all 0.3s ease;
     }
-    .neu-input:focus {
-      box-shadow: inset 6px 6px 12px #cbd5e1, inset -6px -6px 12px #ffffff;
-    }
+    .neu-input::placeholder { color: var(--text-muted); }
+    .neu-input:focus { box-shadow: 0 0 0 3px rgba(16,245,165,0.2); background: #2d3748; }
 
     /* BOTONES */
     .clay-btn {
-      width: 100%;
-      padding: 1rem;
-      background: var(--accent-green);
-      color: #ffffff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      box-shadow: 6px 6px 16px rgba(16, 185, 129, 0.3), 
-                 -6px -6px 16px rgba(255,255,255,0.8),
-                 inset 4px 4px 8px rgba(255,255,255,0.2), 
-                 inset -4px -4px 8px rgba(0,0,0,0.1);
+      position: relative; width: 100%; padding: 1.05rem;
+      background: linear-gradient(135deg, var(--accent-green), #0fd98c);
+      color: #0a0e1a; font-size: 1.05rem; font-weight: 700;
+      border: none; border-radius: 22px; cursor: pointer;
+      box-shadow: 8px 8px 20px rgba(16,245,165,0.2), inset 4px 4px 8px rgba(255,255,255,0.3);
       transition: all 0.2s ease;
     }
-    
-    .clay-btn:hover { background: var(--accent-green-hover); }
-    .clay-btn:active {
-      transform: scale(0.97);
-      box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2);
-    }
+    .clay-btn:hover { transform: translateY(-2px); box-shadow: var(--glow-green); }
+    .clay-btn:active { transform: scale(0.97); }
+    .clay-btn.secondary { background: var(--bg-tertiary); color: var(--text-primary); box-shadow: none; }
+    .clay-btn.ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-glass); box-shadow: none; }
 
-    /* TARJETAS DEL ADMIN */
+    .ripple {
+      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5);
+      transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* STATUS CARD */
+    .status-card {
+      background: linear-gradient(135deg, rgba(16,245,165,0.1), rgba(34,211,238,0.05));
+      border: 1px solid rgba(16,245,165,0.2); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; text-align: center;
+    }
+    .status-dot { width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--accent-green); }
+
+    /* ADMIN */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .stat-card { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 16px; padding: 0.9rem 0.5rem; text-align: center; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
+
+    .tabs { display: flex; background: var(--bg-tertiary); border-radius: 14px; padding: 4px; margin-bottom: 1rem; gap: 4px; }
+    .tab { flex: 1; padding: 0.65rem; text-align: center; border-radius: 10px; cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); border: none; background: transparent; }
+    .tab.active { background: linear-gradient(135deg, var(--accent-green), #0fd98c); color: #0a0e1a; font-weight: 700; }
+
+    .calendar { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .calendar-nav { background: var(--bg-secondary); border: 1px solid var(--border-glass); color: var(--text-primary); width: 32px; height: 32px; border-radius: 10px; cursor: pointer; }
+    .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+    .calendar-weekday { font-size: 0.65rem; color: var(--text-muted); padding: 5px 0; font-weight: 600; }
+    .calendar-day { aspect-ratio: 1; display: grid; place-items: center; font-size: 0.78rem; border-radius: 10px; cursor: pointer; color: var(--text-secondary); }
+    .calendar-day.today { border: 1px solid var(--accent-green); color: var(--accent-green); font-weight: 700; }
+    .calendar-day.has-data { background: rgba(16,245,165,0.15); color: var(--accent-green); font-weight: 600; }
+    .calendar-day.selected { background: var(--accent-green); color: #0a0e1a; font-weight: 700; }
+    .calendar-day.other-month { opacity: 0.35; }
+
     .admin-card {
-      background: rgba(255,255,255,0.6);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-left: 4px solid var(--accent-green);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
+      border-radius: 14px; padding: 0.9rem 1rem; margin-bottom: 0.65rem;
+      border-left: 4px solid var(--accent-green); display: flex; justify-content: space-between; align-items: center;
     }
-    .admin-card h3 { font-size: 1rem; margin-bottom: 0.2rem; }
-    .admin-card p { font-size: 0.85rem; color: var(--text-muted); }
+    .admin-card.late { border-left-color: var(--accent-pink); }
+    .admin-info h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+    .admin-info p { font-size: 0.75rem; color: var(--text-muted); }
+    .admin-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+    .badge-on-time { background: rgba(16,245,165,0.15); color: var(--accent-green); }
+    .badge-late { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
 
-    /* ESTADOS */
-    .status-msg { text-align: center; margin-top: 1.5rem; font-size: 1rem; font-weight: 600; min-height: 24px;}
+    .status-msg { text-align: center; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; min-height: 22px; }
     .success { color: var(--accent-green); }
-    .error { color: #ef4444; }
+    .error { color: var(--accent-pink); }
 
-    /* LOADER */
     .loader {
-      display: none;
-      width: 24px;
-      height: 24px;
-      border: 3px solid rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      border-top-color: #ffffff;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
+      display: none; width: 20px; height: 20px;
+      border: 2px solid rgba(10,14,26,0.2); border-radius: 50%;
+      border-top-color: #0a0e1a; animation: spin 0.8s linear infinite; margin: 0 auto;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+      background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-glass);
+      padding: 0.8rem 1.4rem; border-radius: 14px; font-weight: 600; font-size: 0.85rem; z-index: 1000;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: var(--accent-green); color: var(--accent-green); }
+    .toast.error { border-color: var(--accent-pink); color: var(--accent-pink); }
+
+    /* MODAL DE ÉXITO CON FOTO DE EXCEL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(12px);
+      display: none; justify-content: center; align-items: center; padding: 1.5rem;
+    }
+    .modal-overlay.show { display: flex; animation: modalFadeIn 0.3s ease; }
+    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-card { width: 100%; max-width: 380px; text-align: center; }
+    .success-photo-container { position: relative; width: 130px; height: 130px; margin: 0 auto 1.25rem; }
+    .success-photo-ring {
+      width: 130px; height: 130px; border-radius: 50%; padding: 4px;
+      background: conic-gradient(from 0deg, var(--accent-green), var(--accent-cyan), var(--accent-purple), var(--accent-green));
+    }
+    .success-photo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--bg-primary); }
+    .success-check {
+      position: absolute; bottom: -2px; right: -2px; width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-green); display: grid; place-items: center; font-size: 1.2rem; color: #0a0e1a; font-weight: 700; border: 3px solid var(--bg-primary);
+    }
+
+    .success-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .detail-item { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.75rem; }
+    .detail-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px; }
+    .detail-value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+    .scroll-container { max-height: 360px; overflow-y: auto; padding-right: 5px; }
+    .filter-row { display: flex; gap: 10px; margin-bottom: 1rem; align-items: center; }
+    .filter-row .neu-input { margin-bottom: 0; }
   </style>
 </head>
 <body>
 
+  <div class="bg-particles" id="particles"></div>
+
   <div id="app">
     
-    <!-- ======================================= -->
-    <!-- VISTA EMPLEADOS                         -->
-    <!-- ======================================= -->
+    <!-- VISTA EMPLEADOS -->
     <div id="employee-view" class="view active glass-panel">
-      <h1>Combox <span>Asistencia</span></h1>
-      <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">
-        Ingresa tu cédula para registrar tu turno.
-      </p>
+      <div class="logo">
+        <div class="logo-icon">C</div>
+        <h1>Combox <span class="accent">Asistencia</span></h1>
+      </div>
+      <p class="subtitle">Verificación facial + registro de turno</p>
 
-      <input type="number" id="cedulaInput" class="neu-input" placeholder="Ej: 12345678" autocomplete="off">
-      
+      <div class="scanner-wrapper">
+        <div class="scanner-container" id="scannerContainer">
+          <div class="scanner-ring"></div>
+          <div class="scanner-inner">
+            <video id="scannerVideo" autoplay playsinline muted></video>
+            <div class="scanner-placeholder" id="scannerPlaceholder" style="display:none;">👤</div>
+          </div>
+          <div class="scan-line"></div>
+          <div class="scanner-grid"></div>
+        </div>
+        <div class="scanner-status" id="scannerStatus">
+          <span class="scanner-dot" id="scannerDot"></span>
+          <span id="scannerText">Iniciando cámara...</span>
+        </div>
+      </div>
+
+      <div class="sede-indicator" id="sedeIndicator" style="display:none;">
+        <span>🏢</span>
+        <span id="sedeText">Detectando sede...</span>
+        <span class="sede-dist" id="sedeDist"></span>
+      </div>
+
+      <div class="status-card" id="statusCard" style="display:none;">
+        <span class="status-dot"></span>
+        <span id="statusText">En turno activo</span>
+        <div style="font-size:0.78rem; color: var(--text-secondary); margin-top:5px;" id="statusTime"></div>
+      </div>
+
+      <input type="number" id="cedulaInput" class="neu-input" placeholder="Ingresa tu cédula" autocomplete="off" inputmode="numeric">
+
       <button class="clay-btn" id="btnMarcar" onclick="marcarAsistencia()">
-        <span id="btnText">Marcar Asistencia</span>
+        <span id="btnText">📍 Marcar Asistencia</span>
         <div class="loader" id="btnLoader"></div>
       </button>
 
       <div id="statusMessage" class="status-msg"></div>
     </div>
 
-    <!-- ======================================= -->
-    <!-- VISTA ADMINISTRADOR                     -->
-    <!-- ======================================= -->
+    <!-- VISTA ADMINISTRADOR -->
     <div id="admin-view" class="view glass-panel">
-      <h1>Panel <span>Admin</span></h1>
-      
-      <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
-        <input type="date" class="neu-input" style="margin-bottom: 0;" id="dateFilter">
-        <button class="clay-btn" style="width: auto; padding: 0 1.5rem;">Filtrar</button>
+      <div class="logo">
+        <div class="logo-icon" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">⚡</div>
+        <h1>Panel <span class="accent">Admin</span></h1>
       </div>
+      <p class="subtitle">Gestión de asistencias en tiempo real</p>
 
-      <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-dark);">Reporte del Día</h2>
-      
-      <div id="adminDataContainer" style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
-        <div class="admin-card">
-          <h3>Cargando reportes...</h3>
-          <p>Conectando con la base de datos.</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="statPresent">0</div>
+          <div class="stat-label">Presentes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statLate" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">0</div>
+          <div class="stat-label">Atrasados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statTotal" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">0</div>
+          <div class="stat-label">Total</div>
         </div>
       </div>
-      
-      <button class="clay-btn" style="margin-top: 1rem; background: transparent; color: var(--text-muted); border: 1px solid #cbd5e1; box-shadow: none;" onclick="window.location.href='index.html'">Volver al Inicio</button>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="list" onclick="switchTab('list')">📋 Lista</button>
+        <button class="tab" data-tab="calendar" onclick="switchTab('calendar')">📅 Calendario</button>
+      </div>
+
+      <div id="tab-list">
+        <div class="filter-row">
+          <input type="date" class="neu-input" id="dateFilter">
+          <button class="clay-btn filter-btn" style="width:auto; padding: 0 1.25rem;" onclick="cargarDatosAdmin()">🔍</button>
+        </div>
+        <div class="scroll-container" id="adminDataContainer"></div>
+        <button class="clay-btn secondary" style="margin-top: 1rem;" onclick="exportarCSV()">📥 Exportar CSV</button>
+      </div>
+
+      <div id="tab-calendar" style="display:none;">
+        <div class="calendar">
+          <div class="calendar-header">
+            <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
+            <div class="calendar-month" id="calendarMonth"></div>
+            <button class="calendar-nav" onclick="changeMonth(1)">›</button>
+          </div>
+          <div class="calendar-days" id="calendarDays"></div>
+        </div>
+      </div>
+
+      <button class="clay-btn ghost" style="margin-top: 1rem;" onclick="logout()">← Cerrar sesión</button>
     </div>
 
   </div>
 
+  <!-- MODAL DE ÉXITO CON FOTO DE LA CÉDULA -->
+  <div id="success-modal" class="modal-overlay">
+    <div class="modal-card glass-panel">
+      <div class="success-photo-container">
+        <div class="success-photo-ring">
+          <img id="successPhoto" src="" alt="Foto del empleado" style="display:none;">
+        </div>
+        <div class="success-check">✓</div>
+      </div>
+      <h2 style="font-size: 1.2rem; margin-bottom: 0.2rem;">¡Asistencia Registrada!</h2>
+      <p class="success-msg-text" id="successName" style="color: var(--accent-green); font-weight: 600; font-size: 0.95rem; margin-bottom: 1rem;"></p>
+      
+      <div class="success-details">
+        <div class="detail-item">
+          <span class="detail-label">🏢 Sede</span>
+          <span class="detail-value" id="successSede">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">🕐 Hora</span>
+          <span class="detail-value" id="successTime">-</span>
+        </div>
+      </div>
+      <button class="clay-btn" onclick="closeSuccessModal()">Continuar</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
   <script>
-    // URL de tu App Script
     const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
+    const ADMIN_KEY = "combox2026";
 
-    // =======================================
-    // ENRUTADOR (Detecta si eres el Admin)
-    // =======================================
-    document.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const isAdmin = urlParams.get('admin');
-      const key = urlParams.get('key');
+    let SEDES = [];
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDate = new Date();
+    let calendarData = {};
+    let reportCache = {};
 
-      if (isAdmin === 'true' && key === 'combox2026') {
-        document.getElementById('employee-view').classList.remove('active');
-        document.getElementById('admin-view').classList.add('active');
+    document.addEventListener("DOMContentLoaded", async () => {
+      createParticles();
+      initRipple();
+      await cargarSedesRemotas();
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('admin') === 'true' && params.get('key') === ADMIN_KEY) {
+        showView('admin-view');
         document.getElementById('dateFilter').valueAsDate = new Date();
         cargarDatosAdmin();
+        cargarReporteMensual();
+      } else {
+        showView('employee-view');
+        initCamera();
       }
     });
 
-    // =======================================
-    // LÓGICA DE EMPLEADOS
-    // =======================================
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const colors = ['var(--accent-green)', 'var(--accent-cyan)', 'var(--accent-purple)'];
+      for (let i = 0; i < 10; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 18 + 's';
+        p.style.animationDuration = (12 + Math.random() * 10) + 's';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        container.appendChild(p);
+      }
+    }
+
+    function initRipple() {
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.clay-btn');
+        if (btn) {
+          const ripple = document.createElement('span');
+          const rect = btn.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          ripple.className = 'ripple';
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+          btn.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
+        }
+      });
+    }
+
+    async function initCamera() {
+      const video = document.getElementById('scannerVideo');
+      const placeholder = document.getElementById('scannerPlaceholder');
+      const statusText = document.getElementById('scannerText');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        video.srcObject = stream;
+        await video.play();
+        statusText.textContent = 'Rostro listo';
+      } catch (err) {
+        video.style.display = 'none';
+        placeholder.style.display = 'grid';
+        statusText.textContent = 'Cámara no disponible';
+      }
+    }
+
+    async function cargarSedesRemotas() {
+      try {
+        const res = await fetch(`${API_URL}?action=getSedes`);
+        const data = await res.json();
+        if (data.success) SEDES = data.sedes;
+      } catch (e) {
+        console.warn("Usando sedes locales por defecto");
+      }
+    }
+
+    function calcularDistancia(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function detectarSedeCercana(lat, lng) {
+      if (!SEDES.length) return null;
+      let cercana = null;
+      let distMin = Infinity;
+      SEDES.forEach(sede => {
+        const dist = calcularDistancia(lat, lng, sede.lat, sede.lng);
+        if (dist < distMin) {
+          distMin = dist;
+          cercana = { ...sede, distancia: dist };
+        }
+      });
+      return cercana;
+    }
+
+    function mostrarSedeUI(nombre, distancia) {
+      const indicator = document.getElementById('sedeIndicator');
+      const text = document.getElementById('sedeText');
+      const dist = document.getElementById('sedeDist');
+      indicator.style.display = 'flex';
+      text.textContent = `Sede: ${nombre}`;
+      dist.textContent = distancia < 1 ? `${Math.round(distancia * 1000)} m` : `${distancia.toFixed(1)} km`;
+    }
+
+    function showToast(text, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = (type === 'success' ? '✓ ' : '⚠ ') + text;
+      toast.className = 'toast ' + type;
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function mostrarMensaje(texto, clase) {
+      const msg = document.getElementById('statusMessage');
+      msg.textContent = texto;
+      msg.className = 'status-msg ' + clase;
+    }
+
     async function marcarAsistencia() {
       const cedula = document.getElementById('cedulaInput').value.trim();
       const btnText = document.getElementById('btnText');
       const btnLoader = document.getElementById('btnLoader');
 
       if (!cedula) {
-        mostrarMensaje("Por favor, ingresa tu cédula.", "error");
+        showToast('Ingresa tu cédula', 'error');
         return;
       }
 
       btnText.style.display = 'none';
       btnLoader.style.display = 'block';
-      mostrarMensaje("Ubicando GPS...", "");
+      mostrarMensaje('📡 Obteniendo GPS...', '');
 
       if (!navigator.geolocation) {
         finalizarCarga();
-        mostrarMensaje("Tu teléfono no soporta GPS.", "error");
+        showToast('GPS no soportado', 'error');
         return;
       }
 
       navigator.geolocation.getCurrentPosition(async (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        
-        mostrarMensaje("Registrando...", "");
 
-        const payload = { action: "marcar", cedula: cedula, latitud: lat, longitud: lng };
+        const sedeCercana = detectarSedeCercana(lat, lng);
+        if (sedeCercana) mostrarSedeUI(sedeCercana.nombre, sedeCercana.distancia);
+
+        mostrarMensaje('⏳ Registrando...', '');
+
+        const payload = { action: "marcar", cedula, latitud: lat, longitud: lng };
 
         try {
-          const response = await fetch(API_URL, {
+          const res = await fetch(API_URL, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }
           });
-
-          const data = await response.json();
+          const data = await res.json();
           finalizarCarga();
 
           if (data.success) {
-            mostrarMensaje(data.message, "success");
-            document.getElementById('cedulaInput').value = ''; 
+            document.getElementById('cedulaInput').value = '';
+            showSuccessModal(data);
           } else {
-            mostrarMensaje(data.message, "error");
+            showToast(data.message, 'error');
+            mostrarMensaje(data.message, 'error');
           }
-        } catch (error) {
+        } catch (e) {
           finalizarCarga();
-          mostrarMensaje("Error de conexión. Intenta de nuevo.", "error");
+          showToast('Error de conexión', 'error');
         }
-
-      }, (error) => {
+      }, () => {
         finalizarCarga();
-        mostrarMensaje("Debes permitir el acceso a la ubicación (GPS).", "error");
+        showToast('Permite el acceso al GPS', 'error');
       }, { enableHighAccuracy: true, timeout: 10000 });
-    }
-
-    function mostrarMensaje(texto, clase) {
-      const msg = document.getElementById('statusMessage');
-      msg.textContent = texto;
-      msg.className = `status-msg ${clase}`;
     }
 
     function finalizarCarga() {
@@ -263,28 +599,160 @@
       document.getElementById('btnLoader').style.display = 'none';
     }
 
-    // =======================================
-    // LÓGICA DE ADMINISTRADOR (Mockup visual)
-    // =======================================
-    function cargarDatosAdmin() {
+    function showSuccessModal(data) {
+      const modal = document.getElementById('success-modal');
+      const photo = document.getElementById('successPhoto');
+      const name = document.getElementById('successName');
+      const sedeEl = document.getElementById('successSede');
+      const timeEl = document.getElementById('successTime');
+
+      if (data.foto_cedula && data.foto_cedula.trim() !== "") {
+        photo.src = data.foto_cedula;
+        photo.style.display = 'block';
+      } else {
+        photo.style.display = 'none';
+      }
+
+      name.textContent = data.message;
+      sedeEl.textContent = data.sede || 'Sede Principal';
+      timeEl.textContent = data.hora || new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+      modal.classList.add('show');
+      setTimeout(() => closeSuccessModal(), 6000);
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.remove('show');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById('tab-list').style.display = tab === 'list' ? 'block' : 'none';
+      document.getElementById('tab-calendar').style.display = tab === 'calendar' ? 'block' : 'none';
+      if (tab === 'calendar') renderCalendar();
+    }
+
+    async function cargarDatosAdmin() {
       const container = document.getElementById('adminDataContainer');
-      
-      // Esqueleto visual mientras conectamos la base de datos real más adelante
-      setTimeout(() => {
-        container.innerHTML = `
-          <div class="admin-card">
-            <h3 style="color: var(--accent-green);">María (Encargada)</h3>
-            <p>Entrada: 08:00 AM - A tiempo</p>
-            <p>Salida: 05:05 PM</p>
-          </div>
-          <div class="admin-card" style="border-left-color: #ef4444;">
-            <h3 style="color: #ef4444;">Carlos (Cocina)</h3>
-            <p>Entrada: 08:15 AM - Atrasado</p>
-            <p>Salida: --:--</p>
+      const date = document.getElementById('dateFilter').value || new Date().toISOString().split('T')[0];
+
+      container.innerHTML = `<div style="text-align:center; padding: 2rem; color:var(--text-muted)">Cargando...</div>`;
+
+      try {
+        const res = await fetch(`${API_URL}?action=getReport&date=${date}`);
+        const data = await res.json();
+        if (data.success && data.records) {
+          renderReport(data.records);
+          reportCache[date] = data.records;
+        } else {
+          container.innerHTML = `<div style="text-align:center; padding: 2rem; color:var(--text-muted)">No hay registros</div>`;
+        }
+      } catch (e) {
+        container.innerHTML = `<div style="text-align:center; padding: 2rem; color:var(--accent-pink)">Error al conectar</div>`;
+      }
+    }
+
+    function renderReport(records) {
+      const container = document.getElementById('adminDataContainer');
+      const present = records.filter(r => r.entrada).length;
+      const late = records.filter(r => r.estado === 'late').length;
+
+      document.getElementById('statPresent').textContent = present;
+      document.getElementById('statLate').textContent = late;
+      document.getElementById('statTotal').textContent = records.length;
+
+      if (!records.length) {
+        container.innerHTML = `<div style="text-align:center; padding: 2rem; color:var(--text-muted)">Sin registros hoy</div>`;
+        return;
+      }
+
+      container.innerHTML = records.map(r => {
+        const badgeClass = r.estado === 'late' ? 'badge-late' : 'badge-on-time';
+        const badgeText = r.estado === 'late' ? 'Atrasado' : 'A Tiempo';
+        const cardClass = r.estado === 'late' ? 'late' : '';
+        return `
+          <div class="admin-card ${cardClass}">
+            <div class="admin-info">
+              <h3>${r.nombre}</h3>
+              <p>${r.sede} · In: ${r.entrada || '--:--'} · Out: ${r.salida || '--:--'}</p>
+            </div>
+            <div class="admin-badge ${badgeClass}">${badgeText}</div>
           </div>
         `;
-      }, 1500);
+      }).join('');
     }
+
+    async function cargarReporteMensual() {
+      try {
+        const res = await fetch(`${API_URL}?action=getReporteMensual&month=${currentMonth + 1}&year=${currentYear}`);
+        const data = await res.json();
+        if (data.success) {
+          calendarData = data.days;
+          renderCalendar();
+        }
+      } catch (e) { console.warn(e); }
+    }
+
+    function renderCalendar() {
+      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      const weekdays = ['D','L','M','X','J','V','S'];
+      document.getElementById('calendarMonth').textContent = `${months[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+      let html = weekdays.map(w => `<div class="calendar-weekday">${w}</div>`).join('');
+
+      for (let i = firstDay - 1; i >= 0; i--) {
+        html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
+      }
+
+      const today = new Date();
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+        const hasData = calendarData[dateStr];
+        let classes = 'calendar-day';
+        if (isToday) classes += ' today';
+        if (hasData) classes += ' has-data';
+        html += `<div class="${classes}" onclick="selectDate('${dateStr}')">${d}</div>`;
+      }
+
+      document.getElementById('calendarDays').innerHTML = html;
+    }
+
+    function selectDate(dateStr) {
+      document.getElementById('dateFilter').value = dateStr;
+      switchTab('list');
+      cargarDatosAdmin();
+    }
+
+    function changeMonth(delta) {
+      currentMonth += delta;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      cargarReporteMensual();
+    }
+
+    function exportarCSV() {
+      const date = document.getElementById('dateFilter').value;
+      const records = reportCache[date];
+      if (!records || !records.length) { showToast('No hay datos', 'error'); return; }
+
+      const headers = ['Nombre', 'Sede', 'Entrada', 'Salida', 'Estado'];
+      const rows = records.map(r => [r.nombre, r.sede, r.entrada || '', r.salida || '', r.estado]);
+      let csv = headers.join(',') + '\n' + rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `asistencia_${date}.csv`; a.click();
+      showToast('CSV descargado');
+    }
+
+    function logout() { window.location.href = window.location.pathname; }
   </script>
 </body>
 </html>
