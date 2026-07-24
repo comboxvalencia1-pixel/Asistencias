@@ -9,8 +9,8 @@
     /* VARIABLES MODO CLARO Y VERDE */
     :root {
       --bg-light: #f0f4f8;
-      --accent-green: #10b981; /* Verde brillante */
-      --accent-green-hover: #059669; /* Verde más oscuro al tocar */
+      --accent-green: #10b981; 
+      --accent-green-hover: #059669; 
       --text-dark: #1e293b;
       --text-muted: #64748b;
       --panel-bg: rgba(255, 255, 255, 0.85);
@@ -28,7 +28,6 @@
       position: relative;
     }
 
-    /* CONTENEDOR PRINCIPAL */
     #app { width: 90%; max-width: 450px; z-index: 10; }
 
     /* VISTAS */
@@ -40,7 +39,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* GLASSMORPHISM CLARO (Paneles) */
+    /* PANELES */
     .glass-panel {
       background: var(--panel-bg);
       backdrop-filter: blur(16px);
@@ -54,7 +53,7 @@
     h1 { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; font-weight: 800; }
     h1 span { color: var(--accent-green); }
 
-    /* NEUMORPHISM CLARO (Inputs) */
+    /* INPUTS */
     .neu-input {
       width: 100%;
       padding: 1rem 1.5rem;
@@ -71,9 +70,8 @@
     .neu-input:focus {
       box-shadow: inset 6px 6px 12px #cbd5e1, inset -6px -6px 12px #ffffff;
     }
-    .neu-input::placeholder { color: #94a3b8; }
 
-    /* CLAYMORPHISM VERDE (Botones) */
+    /* BOTONES */
     .clay-btn {
       width: 100%;
       padding: 1rem;
@@ -97,12 +95,22 @@
       box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2);
     }
 
-    /* MENSAJES */
-    .status-msg { 
-      text-align: center; margin-top: 1.5rem; font-size: 1rem; font-weight: 600; min-height: 24px;
+    /* TARJETAS DEL ADMIN */
+    .admin-card {
+      background: rgba(255,255,255,0.6);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--accent-green);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
+    .admin-card h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+    .admin-card p { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* ESTADOS */
+    .status-msg { text-align: center; margin-top: 1.5rem; font-size: 1rem; font-weight: 600; min-height: 24px;}
     .success { color: var(--accent-green); }
-    .error { color: #ef4444; } /* Rojo para errores */
+    .error { color: #ef4444; }
 
     /* LOADER */
     .loader {
@@ -121,7 +129,10 @@
 <body>
 
   <div id="app">
-    <!-- VISTA EMPLEADOS -->
+    
+    <!-- ======================================= -->
+    <!-- VISTA EMPLEADOS                         -->
+    <!-- ======================================= -->
     <div id="employee-view" class="view active glass-panel">
       <h1>Combox <span>Asistencia</span></h1>
       <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">
@@ -135,18 +146,59 @@
         <div class="loader" id="btnLoader"></div>
       </button>
 
-      <!-- Aquí aparecerán los mensajes "Bienvenido, Has llegado tarde" etc. -->
       <div id="statusMessage" class="status-msg"></div>
     </div>
+
+    <!-- ======================================= -->
+    <!-- VISTA ADMINISTRADOR                     -->
+    <!-- ======================================= -->
+    <div id="admin-view" class="view glass-panel">
+      <h1>Panel <span>Admin</span></h1>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+        <input type="date" class="neu-input" style="margin-bottom: 0;" id="dateFilter">
+        <button class="clay-btn" style="width: auto; padding: 0 1.5rem;">Filtrar</button>
+      </div>
+
+      <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-dark);">Reporte del Día</h2>
+      
+      <div id="adminDataContainer" style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
+        <div class="admin-card">
+          <h3>Cargando reportes...</h3>
+          <p>Conectando con la base de datos.</p>
+        </div>
+      </div>
+      
+      <button class="clay-btn" style="margin-top: 1rem; background: transparent; color: var(--text-muted); border: 1px solid #cbd5e1; box-shadow: none;" onclick="window.location.href='index.html'">Volver al Inicio</button>
+    </div>
+
   </div>
 
   <script>
     // URL de tu App Script
     const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
 
+    // =======================================
+    // ENRUTADOR (Detecta si eres el Admin)
+    // =======================================
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isAdmin = urlParams.get('admin');
+      const key = urlParams.get('key');
+
+      if (isAdmin === 'true' && key === 'combox2026') {
+        document.getElementById('employee-view').classList.remove('active');
+        document.getElementById('admin-view').classList.add('active');
+        document.getElementById('dateFilter').valueAsDate = new Date();
+        cargarDatosAdmin();
+      }
+    });
+
+    // =======================================
+    // LÓGICA DE EMPLEADOS
+    // =======================================
     async function marcarAsistencia() {
       const cedula = document.getElementById('cedulaInput').value.trim();
-      const statusMsg = document.getElementById('statusMessage');
       const btnText = document.getElementById('btnText');
       const btnLoader = document.getElementById('btnLoader');
 
@@ -196,8 +248,6 @@
 
       }, (error) => {
         finalizarCarga();
-        // Si no activan el GPS, permitimos enviar 0,0 para que el sistema lo registre pero falle la geocerca.
-        // Opcional: mostrar error directo
         mostrarMensaje("Debes permitir el acceso a la ubicación (GPS).", "error");
       }, { enableHighAccuracy: true, timeout: 10000 });
     }
@@ -211,6 +261,29 @@
     function finalizarCarga() {
       document.getElementById('btnText').style.display = 'block';
       document.getElementById('btnLoader').style.display = 'none';
+    }
+
+    // =======================================
+    // LÓGICA DE ADMINISTRADOR (Mockup visual)
+    // =======================================
+    function cargarDatosAdmin() {
+      const container = document.getElementById('adminDataContainer');
+      
+      // Esqueleto visual mientras conectamos la base de datos real más adelante
+      setTimeout(() => {
+        container.innerHTML = `
+          <div class="admin-card">
+            <h3 style="color: var(--accent-green);">María (Encargada)</h3>
+            <p>Entrada: 08:00 AM - A tiempo</p>
+            <p>Salida: 05:05 PM</p>
+          </div>
+          <div class="admin-card" style="border-left-color: #ef4444;">
+            <h3 style="color: #ef4444;">Carlos (Cocina)</h3>
+            <p>Entrada: 08:15 AM - Atrasado</p>
+            <p>Salida: --:--</p>
+          </div>
+        `;
+      }, 1500);
     }
   </script>
 </body>
