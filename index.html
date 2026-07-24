@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combox - Asistencia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    /* VARIABLES MODO CLARO Y VERDE */
+    :root {
+      --bg-light: #f0f4f8;
+      --accent-green: #10b981; /* Verde brillante */
+      --accent-green-hover: #059669; /* Verde más oscuro al tocar */
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --panel-bg: rgba(255, 255, 255, 0.85);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    #app { width: 90%; max-width: 450px; z-index: 10; }
+
+    /* VISTAS */
+    .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+    .view.active { display: block; opacity: 1; animation: fadeIn 0.5s ease forwards; }
+
+    @keyframes fadeIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* GLASSMORPHISM CLARO (Paneles) */
+    .glass-panel {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 1);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; font-weight: 800; }
+    h1 span { color: var(--accent-green); }
+
+    /* NEUMORPHISM CLARO (Inputs) */
+    .neu-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 12px;
+      color: var(--text-dark);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      outline: none;
+      box-shadow: inset 4px 4px 8px #cbd5e1, inset -4px -4px 8px #ffffff;
+      transition: all 0.3s ease;
+    }
+    .neu-input:focus {
+      box-shadow: inset 6px 6px 12px #cbd5e1, inset -6px -6px 12px #ffffff;
+    }
+    .neu-input::placeholder { color: #94a3b8; }
+
+    /* CLAYMORPHISM VERDE (Botones) */
+    .clay-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--accent-green);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 6px 6px 16px rgba(16, 185, 129, 0.3), 
+                 -6px -6px 16px rgba(255,255,255,0.8),
+                 inset 4px 4px 8px rgba(255,255,255,0.2), 
+                 inset -4px -4px 8px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .clay-btn:hover { background: var(--accent-green-hover); }
+    .clay-btn:active {
+      transform: scale(0.97);
+      box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* MENSAJES */
+    .status-msg { 
+      text-align: center; margin-top: 1.5rem; font-size: 1rem; font-weight: 600; min-height: 24px;
+    }
+    .success { color: var(--accent-green); }
+    .error { color: #ef4444; } /* Rojo para errores */
+
+    /* LOADER */
+    .loader {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <!-- VISTA EMPLEADOS -->
+    <div id="employee-view" class="view active glass-panel">
+      <h1>Combox <span>Asistencia</span></h1>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">
+        Ingresa tu cédula para registrar tu turno.
+      </p>
+
+      <input type="number" id="cedulaInput" class="neu-input" placeholder="Ej: 12345678" autocomplete="off">
+      
+      <button class="clay-btn" id="btnMarcar" onclick="marcarAsistencia()">
+        <span id="btnText">Marcar Asistencia</span>
+        <div class="loader" id="btnLoader"></div>
+      </button>
+
+      <!-- Aquí aparecerán los mensajes "Bienvenido, Has llegado tarde" etc. -->
+      <div id="statusMessage" class="status-msg"></div>
+    </div>
+  </div>
+
+  <script>
+    // URL de tu App Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
+
+    async function marcarAsistencia() {
+      const cedula = document.getElementById('cedulaInput').value.trim();
+      const statusMsg = document.getElementById('statusMessage');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+
+      if (!cedula) {
+        mostrarMensaje("Por favor, ingresa tu cédula.", "error");
+        return;
+      }
+
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'block';
+      mostrarMensaje("Ubicando GPS...", "");
+
+      if (!navigator.geolocation) {
+        finalizarCarga();
+        mostrarMensaje("Tu teléfono no soporta GPS.", "error");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        
+        mostrarMensaje("Registrando...", "");
+
+        const payload = { action: "marcar", cedula: cedula, latitud: lat, longitud: lng };
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+          });
+
+          const data = await response.json();
+          finalizarCarga();
+
+          if (data.success) {
+            mostrarMensaje(data.message, "success");
+            document.getElementById('cedulaInput').value = ''; 
+          } else {
+            mostrarMensaje(data.message, "error");
+          }
+        } catch (error) {
+          finalizarCarga();
+          mostrarMensaje("Error de conexión. Intenta de nuevo.", "error");
+        }
+
+      }, (error) => {
+        finalizarCarga();
+        // Si no activan el GPS, permitimos enviar 0,0 para que el sistema lo registre pero falle la geocerca.
+        // Opcional: mostrar error directo
+        mostrarMensaje("Debes permitir el acceso a la ubicación (GPS).", "error");
+      }, { enableHighAccuracy: true, timeout: 10000 });
+    }
+
+    function mostrarMensaje(texto, clase) {
+      const msg = document.getElementById('statusMessage');
+      msg.textContent = texto;
+      msg.className = `status-msg ${clase}`;
+    }
+
+    function finalizarCarga() {
+      document.getElementById('btnText').style.display = 'block';
+      document.getElementById('btnLoader').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
