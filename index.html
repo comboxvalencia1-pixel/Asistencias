@@ -7,247 +7,161 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0e1a;
-      --bg-secondary: #111827;
-      --bg-tertiary: #1f2937;
-      --bg-card: rgba(30, 41, 59, 0.6);
-      --accent-green: #10f5a5;
-      --accent-cyan: #22d3ee;
-      --accent-purple: #a855f7;
-      --accent-pink: #ec4899;
-      --accent-gold: #fbbf24;
-      --accent-red: #ef4444;
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-glass: rgba(255, 255, 255, 0.08);
-      --glow-green: 0 0 30px rgba(16, 245, 165, 0.4);
+      --bg-primary:#0a0e1a;--bg-secondary:#111827;--bg-tertiary:#1f2937;--bg-card:rgba(30,41,59,0.6);
+      --accent-green:#10f5a5;--accent-cyan:#22d3ee;--accent-purple:#a855f7;--accent-pink:#ec4899;
+      --accent-gold:#fbbf24;--accent-red:#ef4444;--text-primary:#f1f5f9;--text-secondary:#94a3b8;
+      --text-muted:#64748b;--border-glass:rgba(255,255,255,0.08);--glow-green:0 0 30px rgba(16,245,165,0.4);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
-    body {
-      background: var(--bg-primary);
-      background-image:
-        radial-gradient(at 20% 20%, rgba(16,245,165,0.07) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(168,85,247,0.07) 0px, transparent 50%);
-      color: var(--text-primary); min-height: 100vh;
-      display: flex; justify-content: center; align-items: flex-start;
-      padding: 1rem; overflow-x: hidden;
-    }
-    .bg-particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-    .particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; opacity: 0.2; animation: floatUp 18s infinite linear; }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.2; }
-      90% { opacity: 0.2; } 100% { transform: translateY(-100vh) translateX(60px); opacity: 0; }
-    }
-    #app { width: 100%; max-width: 460px; z-index: 10; padding-top: 0.5rem; }
-    .view { display: none; }
-    .view.active { display: block; animation: slideIn 0.4s ease forwards; }
-    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;}
+    body{background:var(--bg-primary);background-image:radial-gradient(at 20% 20%,rgba(16,245,165,0.07) 0px,transparent 50%),radial-gradient(at 80% 80%,rgba(168,85,247,0.07) 0px,transparent 50%);color:var(--text-primary);min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:1rem;overflow-x:hidden;}
+    .bg-particles{position:fixed;inset:0;pointer-events:none;z-index:1;}
+    .particle{position:absolute;width:3px;height:3px;border-radius:50%;opacity:0.2;animation:floatUp 18s infinite linear;}
+    @keyframes floatUp{0%{transform:translateY(100vh);opacity:0;}10%{opacity:0.2;}90%{opacity:0.2;}100%{transform:translateY(-100vh) translateX(60px);opacity:0;}}
+    #app{width:100%;max-width:460px;z-index:10;padding-top:0.5rem;}
+    .view{display:none;}.view.active{display:block;animation:slideIn 0.35s ease forwards;}
+    @keyframes slideIn{from{transform:translateY(15px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .glass-panel{background:var(--bg-card);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--border-glass);border-radius:28px;padding:1.75rem 1.5rem;box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);position:relative;overflow:hidden;}
+    .logo{display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:0.4rem;}
+    .logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));border-radius:12px;display:grid;place-items:center;font-weight:700;color:#0a0e1a;box-shadow:var(--glow-green);font-size:1.1rem;}
+    h1{font-size:1.6rem;font-weight:700;}
+    h1 .accent{background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .subtitle{text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;}
 
-    .glass-panel {
-      background: var(--bg-card); backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border: 1px solid var(--border-glass); border-radius: 28px; padding: 1.75rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-      position: relative; overflow: hidden;
-    }
-    .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.4rem; }
-    .logo-icon {
-      width: 38px; height: 38px; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-      border-radius: 12px; display: grid; place-items: center;
-      font-weight: 700; color: #0a0e1a; box-shadow: var(--glow-green); font-size: 1.1rem;
-    }
-    h1 { font-size: 1.6rem; font-weight: 700; }
-    h1 .accent { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; }
+    /* Iconos blancos */
+    .ico{display:inline-block;filter:grayscale(1) brightness(100);}
+    .tab.active .ico,.clay-btn .ico{filter:none;}
 
-    /* ===== ESCÁNER SIMPLIFICADO: solo aro verde + cámara ===== */
-    .scanner-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.25rem; }
-    .scanner-container { width: 180px; height: 180px; position: relative; border-radius: 50%; }
-    .scanner-ring {
-      position: absolute; inset: -4px; border-radius: 50%;
-      border: 3px solid var(--accent-green);
-      box-shadow: 0 0 15px rgba(16,245,165,0.3), inset 0 0 15px rgba(16,245,165,0.1);
-      z-index: 0;
-    }
-    .scanner-inner { position: absolute; inset: 4px; border-radius: 50%; overflow: hidden; z-index: 1; background: var(--bg-secondary); }
-    #scannerVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
-    .scanner-placeholder { width: 100%; height: 100%; display: grid; place-items: center; background: var(--bg-tertiary); color: var(--text-muted); font-size: 3rem; }
-    .scan-line {
-      position: absolute; left: 15%; width: 70%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-      box-shadow: 0 0 10px var(--accent-green); z-index: 3; border-radius: 2px;
-      animation: scanMove 2.8s ease-in-out infinite;
-    }
-    @keyframes scanMove { 0%,100% { top: 15%; opacity: 0.5; } 50% { top: 85%; opacity: 1; } }
-    .scanner-status {
-      display: flex; align-items: center; gap: 8px; margin-top: 10px;
-      font-size: 0.78rem; color: var(--text-secondary);
-      padding: 5px 14px; background: var(--bg-tertiary); border-radius: 20px; border: 1px solid var(--border-glass);
-    }
-    .scanner-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    /* Escáner simplificado */
+    .scanner-wrapper{display:flex;flex-direction:column;align-items:center;margin-bottom:1.25rem;}
+    .scanner-container{width:180px;height:180px;position:relative;border-radius:50%;}
+    .scanner-ring{position:absolute;inset:-4px;border-radius:50%;border:3px solid var(--accent-green);box-shadow:0 0 15px rgba(16,245,165,0.3),inset 0 0 15px rgba(16,245,165,0.1);z-index:0;}
+    .scanner-inner{position:absolute;inset:4px;border-radius:50%;overflow:hidden;z-index:1;background:var(--bg-secondary);}
+    #scannerVideo{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
+    .scanner-placeholder{width:100%;height:100%;display:grid;place-items:center;background:var(--bg-tertiary);color:var(--text-muted);font-size:3rem;}
+    .scan-line{position:absolute;left:15%;width:70%;height:2px;background:linear-gradient(90deg,transparent,var(--accent-green),transparent);box-shadow:0 0 10px var(--accent-green);z-index:3;border-radius:2px;animation:scanMove 2.8s ease-in-out infinite;}
+    @keyframes scanMove{0%,100%{top:15%;opacity:0.5;}50%{top:85%;opacity:1;}}
+    .scanner-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:0.78rem;color:var(--text-secondary);padding:5px 14px;background:var(--bg-tertiary);border-radius:20px;border:1px solid var(--border-glass);}
+    .scanner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-green);animation:pulse 1.5s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
-    .sede-indicator {
-      display: flex; align-items: center; gap: 8px;
-      background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.2);
-      border-radius: 14px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: var(--accent-cyan);
-    }
-    .sede-indicator .sede-dist { color: var(--text-muted); font-size: 0.75rem; margin-left: auto; }
+    .sede-indicator{display:flex;align-items:center;gap:8px;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:14px;padding:0.7rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:var(--accent-cyan);}
+    .sede-indicator .sede-dist{color:var(--text-muted);font-size:0.75rem;margin-left:auto;}
 
-    .neu-input {
-      width: 100%; padding: 0.95rem 1.4rem; background: var(--bg-tertiary);
-      border: 1px solid var(--border-glass); border-radius: 16px; color: var(--text-primary);
-      font-size: 1rem; font-family: inherit; margin-bottom: 1rem; outline: none;
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.5), inset -4px -4px 8px rgba(255,255,255,0.03);
-      transition: all 0.3s ease;
-    }
-    .neu-input::placeholder { color: var(--text-muted); }
-    .neu-input:focus { box-shadow: 0 0 0 3px rgba(16,245,165,0.2); background: #2d3748; }
-    .neu-input:disabled { opacity: 0.5; cursor: not-allowed; }
-    .neu-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
+    .neu-input{width:100%;padding:0.95rem 1.4rem;background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:16px;color:var(--text-primary);font-size:1rem;font-family:inherit;margin-bottom:1rem;outline:none;box-shadow:inset 4px 4px 8px rgba(0,0,0,0.5),inset -4px -4px 8px rgba(255,255,255,0.03);transition:all 0.3s ease;}
+    .neu-input::placeholder{color:var(--text-muted);}
+    .neu-input:focus{box-shadow:0 0 0 3px rgba(16,245,165,0.2);background:#2d3748;}
+    .neu-input:disabled{opacity:0.5;cursor:not-allowed;}
+    .neu-input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.8);cursor:pointer;}
 
-    .clay-btn {
-      position: relative; width: 100%; padding: 1.05rem;
-      background: linear-gradient(135deg, var(--accent-green), #0fd98c);
-      color: #0a0e1a; font-size: 1.05rem; font-weight: 700;
-      border: none; border-radius: 22px; cursor: pointer; overflow: hidden;
-      box-shadow: 8px 8px 20px rgba(16,245,165,0.2), inset 4px 4px 8px rgba(255,255,255,0.3);
-      transition: all 0.2s ease;
-    }
-    .clay-btn:hover { transform: translateY(-2px); box-shadow: var(--glow-green); }
-    .clay-btn:active { transform: scale(0.97); }
-    .clay-btn.btn-red {
-      background: linear-gradient(135deg, var(--accent-red), #dc2626);
-      box-shadow: 8px 8px 20px rgba(239,68,68,0.2), inset 4px 4px 8px rgba(255,255,255,0.2);
-    }
-    .clay-btn.btn-red:hover { box-shadow: 0 0 30px rgba(239,68,68,0.4); }
-    .clay-btn.secondary { background: var(--bg-tertiary); color: var(--text-primary); box-shadow: none; }
-    .clay-btn.ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-glass); box-shadow: none; font-size: 0.85rem; padding: 0.7rem; }
-    .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5); transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none; }
-    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+    .neu-select{width:100%;padding:0.8rem 1rem;background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:14px;color:var(--text-primary);font-size:0.85rem;font-family:inherit;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+    .neu-select option{background:var(--bg-secondary);color:var(--text-primary);}
 
-    .status-msg { text-align: center; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; min-height: 22px; }
-    .success { color: var(--accent-green); }
-    .error { color: var(--accent-pink); }
-    .loader { display: none; width: 20px; height: 20px; border: 2px solid rgba(10,14,26,0.2); border-radius: 50%; border-top-color: #0a0e1a; animation: spin 0.8s linear infinite; margin: 0 auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .clay-btn{position:relative;width:100%;padding:1.05rem;background:linear-gradient(135deg,var(--accent-green),#0fd98c);color:#0a0e1a;font-size:1.05rem;font-weight:700;border:none;border-radius:22px;cursor:pointer;overflow:hidden;box-shadow:8px 8px 20px rgba(16,245,165,0.2),inset 4px 4px 8px rgba(255,255,255,0.3);transition:all 0.2s ease;}
+    .clay-btn:hover{transform:translateY(-2px);box-shadow:var(--glow-green);}
+    .clay-btn:active{transform:scale(0.97);}
+    .clay-btn.btn-red{background:linear-gradient(135deg,var(--accent-red),#dc2626);box-shadow:8px 8px 20px rgba(239,68,68,0.2),inset 4px 4px 8px rgba(255,255,255,0.2);}
+    .clay-btn.btn-red:hover{box-shadow:0 0 30px rgba(239,68,68,0.4);}
+    .clay-btn.secondary{background:var(--bg-tertiary);color:var(--text-primary);box-shadow:none;}
+    .clay-btn.sm{padding:0.7rem;font-size:0.85rem;border-radius:16px;}
+    .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.5);transform:scale(0);animation:rippleAnim 0.6s linear;pointer-events:none;}
+    @keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
 
-    .toast {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-      background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-glass);
-      padding: 0.8rem 1.4rem; border-radius: 14px; font-weight: 600; font-size: 0.85rem; z-index: 1000;
-      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.success { border-color: var(--accent-green); color: var(--accent-green); }
-    .toast.error { border-color: var(--accent-pink); color: var(--accent-pink); }
+    .status-msg{text-align:center;margin-top:1rem;font-size:0.85rem;font-weight:600;min-height:22px;}
+    .success{color:var(--accent-green);}.error{color:var(--accent-pink);}
+    .loader{display:none;width:20px;height:20px;border:2px solid rgba(10,14,26,0.2);border-radius:50%;border-top-color:#0a0e1a;animation:spin 0.8s linear infinite;margin:0 auto;}
+    @keyframes spin{to{transform:rotate(360deg);}}
 
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-    ::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 10px; }
-    .scroll-container { max-height: 360px; overflow-y: auto; padding-right: 5px; }
-    .filter-row { display: flex; gap: 10px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
-    .filter-row .neu-input { margin-bottom: 0; flex: 1; min-width: 120px; }
+    .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--bg-card);backdrop-filter:blur(20px);border:1px solid var(--border-glass);padding:0.8rem 1.4rem;border-radius:14px;font-weight:600;font-size:0.85rem;z-index:1000;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+    .toast.show{transform:translateX(-50%) translateY(0);}
+    .toast.success{border-color:var(--accent-green);color:var(--accent-green);}
+    .toast.error{border-color:var(--accent-pink);color:var(--accent-pink);}
 
-    .skeleton { background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-card) 50%, var(--bg-tertiary) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg-secondary);}::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:10px;}
+    .scroll-container{max-height:360px;overflow-y:auto;padding-right:5px;}
+    .filter-row{display:flex;gap:8px;margin-bottom:0.75rem;align-items:center;flex-wrap:wrap;}
+    .filter-row .neu-input,.filter-row .neu-select{margin-bottom:0;flex:1;min-width:100px;}
 
-    /* ADMIN */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
-    .stat-card { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 16px; padding: 0.9rem 0.5rem; text-align: center; }
-    .stat-value { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
+    .skeleton{background:linear-gradient(90deg,var(--bg-tertiary) 25%,var(--bg-card) 50%,var(--bg-tertiary) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+    @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 
-    .tabs { display: flex; background: var(--bg-tertiary); border-radius: 14px; padding: 4px; margin-bottom: 1rem; gap: 3px; flex-wrap: wrap; }
-    .tab { flex: 1; padding: 0.6rem 0.3rem; text-align: center; border-radius: 10px; cursor: pointer; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); border: none; background: transparent; font-family: inherit; transition: all 0.3s ease; min-width: 60px; }
-    .tab.active { background: linear-gradient(135deg, var(--accent-green), #0fd98c); color: #0a0e1a; }
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.25rem;}
+    .stat-card{background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:16px;padding:0.9rem 0.5rem;text-align:center;}
+    .stat-value{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stat-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;margin-top:3px;}
 
-    .calendar { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; }
-    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
-    .calendar-nav { background: var(--bg-secondary); border: 1px solid var(--border-glass); color: var(--text-primary); width: 32px; height: 32px; border-radius: 10px; cursor: pointer; font-size: 1rem; }
-    .calendar-nav:hover { background: var(--accent-green); color: #0a0e1a; }
-    .calendar-month { font-weight: 600; font-size: 0.9rem; }
-    .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
-    .calendar-weekday { font-size: 0.65rem; color: var(--text-muted); padding: 5px 0; font-weight: 600; }
-    .calendar-day { aspect-ratio: 1; display: grid; place-items: center; font-size: 0.75rem; border-radius: 10px; cursor: pointer; color: var(--text-secondary); transition: all 0.2s ease; border: 1px solid transparent; position: relative; }
-    .calendar-day:hover { background: var(--bg-card); }
-    .calendar-day.today { border: 1px solid var(--accent-green); color: var(--accent-green); font-weight: 700; }
-    .calendar-day.other-month { opacity: 0.35; }
-    .calendar-day .cal-dot { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; border-radius: 50%; }
-    .cal-dot.green { background: var(--accent-green); }
-    .cal-dot.yellow { background: var(--accent-gold); }
-    .cal-dot.red { background: var(--accent-red); }
+    .tabs{display:flex;background:var(--bg-tertiary);border-radius:14px;padding:4px;margin-bottom:1rem;gap:3px;}
+    .tab{flex:1;padding:0.6rem 0.3rem;text-align:center;border-radius:10px;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);border:none;background:transparent;font-family:inherit;transition:all 0.3s ease;}
+    .tab.active{background:linear-gradient(135deg,var(--accent-green),#0fd98c);color:#0a0e1a;}
 
-    .admin-card {
-      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
-      border-radius: 14px; padding: 0.85rem 1rem; margin-bottom: 0.6rem;
-      border-left: 4px solid var(--accent-green);
-      transition: all 0.2s ease; cursor: default;
-    }
-    .admin-card:hover { transform: translateX(3px); }
-    .admin-card.late { border-left-color: var(--accent-gold); }
-    .admin-card.absent { border-left-color: var(--text-muted); opacity: 0.7; }
-    .admin-card.clickable { cursor: pointer; }
-    .admin-info h3 { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
-    .admin-info p { font-size: 0.73rem; color: var(--text-muted); }
-    .admin-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.63rem; font-weight: 600; text-transform: uppercase; white-space: nowrap; display: inline-block; }
-    .badge-on-time { background: rgba(16,245,165,0.15); color: var(--accent-green); }
-    .badge-late { background: rgba(251,191,36,0.15); color: var(--accent-gold); }
-    .badge-absent { background: rgba(100,116,139,0.15); color: var(--text-muted); }
-    .badge-active { background: rgba(16,245,165,0.15); color: var(--accent-green); }
-    .badge-inactive { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+    .calendar{background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:18px;padding:1rem;margin-bottom:0.75rem;}
+    .calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;}
+    .calendar-nav{background:var(--bg-secondary);border:1px solid var(--border-glass);color:var(--text-primary);width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:1rem;}
+    .calendar-nav:hover{background:var(--accent-green);color:#0a0e1a;}
+    .calendar-month{font-weight:600;font-size:0.9rem;}
+    .calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;}
+    .calendar-weekday{font-size:0.65rem;color:var(--text-muted);padding:5px 0;font-weight:600;}
+    .calendar-day{aspect-ratio:1;display:grid;place-items:center;font-size:0.75rem;border-radius:10px;cursor:pointer;color:var(--text-secondary);transition:all 0.15s ease;border:1px solid transparent;position:relative;}
+    .calendar-day:hover{background:var(--bg-card);}
+    .calendar-day.today{border:1px solid var(--accent-green);color:var(--accent-green);font-weight:700;}
+    .calendar-day.selected{background:var(--accent-green);color:#0a0e1a;font-weight:700;}
+    .calendar-day.other-month{opacity:0.35;}
+    .cal-dot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;}
+    .cal-dot.green{background:var(--accent-green);}.cal-dot.yellow{background:var(--accent-gold);}.cal-dot.red{background:var(--accent-red);}
 
-    .sede-group-title { font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); margin: 1rem 0 0.5rem; padding-bottom: 4px; border-bottom: 1px solid var(--border-glass); }
+    .admin-card{background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:14px;padding:0.85rem 1rem;margin-bottom:0.6rem;border-left:4px solid var(--accent-green);transition:all 0.15s ease;}
+    .admin-card:hover{transform:translateX(3px);}
+    .admin-card.late{border-left-color:var(--accent-gold);}
+    .admin-card.absent{border-left-color:var(--text-muted);opacity:0.7;}
+    .admin-card.clickable{cursor:pointer;}
+    .admin-info h3{font-size:0.88rem;font-weight:600;margin-bottom:3px;}
+    .admin-info p{font-size:0.73rem;color:var(--text-muted);}
+    .admin-badge{padding:3px 10px;border-radius:20px;font-size:0.63rem;font-weight:600;text-transform:uppercase;white-space:nowrap;display:inline-block;}
+    .badge-on-time{background:rgba(16,245,165,0.15);color:var(--accent-green);}
+    .badge-late{background:rgba(251,191,36,0.15);color:var(--accent-gold);}
+    .badge-absent{background:rgba(100,116,139,0.15);color:var(--text-muted);}
+    .badge-active{background:rgba(16,245,165,0.15);color:var(--accent-green);}
+    .badge-inactive{background:rgba(239,68,68,0.15);color:var(--accent-red);}
+    .sede-group-title{font-size:0.8rem;font-weight:700;color:var(--accent-cyan);margin:1rem 0 0.5rem;padding-bottom:4px;border-bottom:1px solid var(--border-glass);}
 
-    /* MODAL */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 9999;
-      background: rgba(10,14,26,0.88); backdrop-filter: blur(12px);
-      display: none; justify-content: center; align-items: center; padding: 1.5rem;
-    }
-    .modal-overlay.show { display: flex; animation: modalFadeIn 0.3s ease; }
-    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .modal-card { width: 100%; max-width: 380px; text-align: center; animation: modalPop 0.4s cubic-bezier(0.16,1,0.3,1); max-height: 90vh; overflow-y: auto; }
-    @keyframes modalPop { from { transform: scale(0.85) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    .modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(10,14,26,0.88);backdrop-filter:blur(12px);display:none;justify-content:center;align-items:center;padding:1.5rem;}
+    .modal-overlay.show{display:flex;animation:modalFadeIn 0.3s ease;}
+    @keyframes modalFadeIn{from{opacity:0;}to{opacity:1;}}
+    .modal-card{width:100%;max-width:380px;text-align:center;animation:modalPop 0.4s cubic-bezier(0.16,1,0.3,1);max-height:90vh;overflow-y:auto;}
+    @keyframes modalPop{from{transform:scale(0.85) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+    .success-photo-container{position:relative;width:120px;height:120px;margin:0 auto 1rem;}
+    .success-photo-ring{width:120px;height:120px;border-radius:50%;padding:3px;border:3px solid var(--accent-green);box-shadow:var(--glow-green);}
+    .success-photo-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:3px solid var(--bg-primary);}
+    .success-photo-placeholder{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:var(--bg-tertiary);font-size:2.5rem;border:3px solid var(--bg-primary);}
+    .success-check{position:absolute;bottom:-2px;right:-2px;width:38px;height:38px;border-radius:50%;background:var(--accent-green);display:grid;place-items:center;font-size:1.1rem;color:#0a0e1a;font-weight:700;border:3px solid var(--bg-primary);animation:checkPop 0.4s 0.2s cubic-bezier(0.16,1,0.3,1) both;}
+    @keyframes checkPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+    .modal-card h2{font-size:1.15rem;margin-bottom:0.2rem;}
+    .modal-name{color:var(--accent-green);font-weight:700;font-size:1rem;margin-bottom:0.75rem;}
+    .success-details{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem;}
+    .detail-item{background:var(--bg-tertiary);border:1px solid var(--border-glass);border-radius:14px;padding:0.7rem;}
+    .detail-label{font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:3px;}
+    .detail-value{font-size:0.88rem;font-weight:600;color:var(--text-primary);}
 
-    .success-photo-container { position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; }
-    .success-photo-ring { width: 120px; height: 120px; border-radius: 50%; padding: 3px; border: 3px solid var(--accent-green); box-shadow: var(--glow-green); }
-    .success-photo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--bg-primary); }
-    .success-photo-placeholder { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: var(--bg-tertiary); font-size: 2.5rem; border: 3px solid var(--bg-primary); }
-    .success-check {
-      position: absolute; bottom: -2px; right: -2px; width: 38px; height: 38px; border-radius: 50%;
-      background: var(--accent-green); display: grid; place-items: center;
-      font-size: 1.1rem; color: #0a0e1a; font-weight: 700; border: 3px solid var(--bg-primary);
-      animation: checkPop 0.4s 0.2s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    @keyframes checkPop { 0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
-    .modal-card h2 { font-size: 1.15rem; margin-bottom: 0.2rem; }
-    .modal-name { color: var(--accent-green); font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; }
-    .success-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
-    .detail-item { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.7rem; }
-    .detail-item.full { grid-column: 1 / -1; }
-    .detail-label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 3px; }
-    .detail-value { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); }
+    .confetti-piece{position:fixed;top:-15px;z-index:10001;pointer-events:none;animation:confettiFall linear forwards;}
+    @keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}80%{opacity:1;}100%{transform:translateY(105vh) rotate(720deg);opacity:0;}}
 
-    .confetti-piece { position: fixed; top: -15px; z-index: 10001; pointer-events: none; animation: confettiFall linear forwards; }
-    @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+    .change-user{text-align:center;margin-top:0.75rem;}
+    .change-user a{color:var(--text-muted);font-size:0.72rem;cursor:pointer;text-decoration:underline;}
+    .change-user a:hover{color:var(--accent-pink);}
 
-    .change-user { text-align: center; margin-top: 0.75rem; }
-    .change-user a { color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline; }
-    .change-user a:hover { color: var(--accent-pink); }
-
-    .user-detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; text-align: left; }
-    .user-detail-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-green); }
-    .user-detail-photo-ph { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-tertiary); font-size: 1.5rem; border: 2px solid var(--accent-green); }
-    .user-detail-info h3 { font-size: 0.95rem; }
-    .user-detail-info p { font-size: 0.75rem; color: var(--text-muted); }
-    .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
-    .user-stat { background: var(--bg-tertiary); border-radius: 12px; padding: 0.6rem; text-align: center; border: 1px solid var(--border-glass); }
-    .user-stat-val { font-size: 1.3rem; font-weight: 700; }
-    .user-stat-lbl { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
-    .back-btn { background: none; border: none; color: var(--accent-cyan); cursor: pointer; font-size: 0.85rem; font-family: inherit; margin-bottom: 0.75rem; padding: 4px 0; }
-    .back-btn:hover { text-decoration: underline; }
+    .user-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem;text-align:left;}
+    .user-detail-photo{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--accent-green);}
+    .user-detail-photo-ph{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--bg-tertiary);font-size:1.5rem;border:2px solid var(--accent-green);}
+    .user-detail-info h3{font-size:0.95rem;}
+    .user-detail-info p{font-size:0.75rem;color:var(--text-muted);}
+    .user-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:0.75rem;}
+    .user-stat{background:var(--bg-tertiary);border-radius:12px;padding:0.6rem;text-align:center;border:1px solid var(--border-glass);}
+    .user-stat-val{font-size:1.3rem;font-weight:700;}
+    .user-stat-lbl{font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;}
+    .back-btn{background:none;border:none;color:var(--accent-cyan);cursor:pointer;font-size:0.85rem;font-family:inherit;margin-bottom:0.75rem;padding:4px 0;}
+    .back-btn:hover{text-decoration:underline;}
+    .section-title{font-size:0.82rem;font-weight:700;margin:0.75rem 0 0.5rem;color:var(--text-secondary);}
+    .hoy-date-label{text-align:center;font-size:0.78rem;color:var(--accent-cyan);margin-bottom:0.75rem;font-weight:600;}
+    .legend{display:flex;gap:12px;justify-content:center;font-size:0.68rem;color:var(--text-muted);margin-bottom:0.5rem;}
   </style>
 </head>
 <body>
@@ -258,9 +172,8 @@
     <div id="employee-view" class="view active glass-panel">
       <div class="logo"><div class="logo-icon">C</div><h1>Combox <span class="accent">Asistencia</span></h1></div>
       <p class="subtitle">Verificación facial + registro de turno</p>
-
       <div class="scanner-wrapper">
-        <div class="scanner-container" id="scannerContainer">
+        <div class="scanner-container">
           <div class="scanner-ring"></div>
           <div class="scanner-inner">
             <video id="scannerVideo" autoplay playsinline muted></video>
@@ -270,22 +183,10 @@
         </div>
         <div class="scanner-status"><span class="scanner-dot"></span><span id="scannerText">Iniciando cámara...</span></div>
       </div>
-
-      <div class="sede-indicator" id="sedeIndicator" style="display:none;">
-        <span>🏢</span><span id="sedeText"></span><span class="sede-dist" id="sedeDist"></span>
-      </div>
-
+      <div class="sede-indicator" id="sedeIndicator" style="display:none;"><span>🏢</span><span id="sedeText"></span><span class="sede-dist" id="sedeDist"></span></div>
       <input type="number" id="cedulaInput" class="neu-input" placeholder="Ingresa tu cédula" autocomplete="off" inputmode="numeric">
-
-      <button class="clay-btn" id="btnMarcar" onclick="marcarAsistencia()">
-        <span id="btnText">📍 Marcar Asistencia</span>
-        <div class="loader" id="btnLoader"></div>
-      </button>
-
-      <div class="change-user" id="changeUserLink" style="display:none;">
-        <a onclick="cambiarUsuario()">Cambiar usuario</a>
-      </div>
-
+      <button class="clay-btn" id="btnMarcar" onclick="marcarAsistencia()"><span id="btnText">📍 Marcar Asistencia</span><div class="loader" id="btnLoader"></div></button>
+      <div class="change-user" id="changeUserLink" style="display:none;"><a onclick="cambiarUsuario()">Cambiar usuario</a></div>
       <div id="statusMessage" class="status-msg"></div>
     </div>
 
@@ -301,42 +202,32 @@
       </div>
 
       <div class="tabs">
-        <button class="tab active" data-tab="hoy" onclick="switchTab('hoy')">📋 Hoy</button>
-        <button class="tab" data-tab="personalizado" onclick="switchTab('personalizado')">📅 Rango</button>
-        <button class="tab" data-tab="usuarios" onclick="switchTab('usuarios')">👥 Usuarios</button>
-        <button class="tab" data-tab="calendario" onclick="switchTab('calendario')">📆 Calendario</button>
+        <button class="tab active" data-tab="hoy" onclick="switchTab('hoy')"><span class="ico">📋</span> <span id="tabHoyLabel">Hoy</span></button>
+        <button class="tab" data-tab="usuarios" onclick="switchTab('usuarios')"><span class="ico">👥</span> Usuarios</button>
+        <button class="tab" data-tab="calendario" onclick="switchTab('calendario')"><span class="ico">📆</span> Calendario</button>
       </div>
 
       <!-- TAB HOY -->
       <div id="tab-hoy">
-        <div class="scroll-container" id="adminDataContainer">
-          <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
-          <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
-          <div class="skeleton" style="height:52px;"></div>
-        </div>
-        <button class="clay-btn secondary" style="margin-top:1rem;" onclick="exportarCSV()">📥 Exportar CSV</button>
-      </div>
-
-      <!-- TAB PERSONALIZADO -->
-      <div id="tab-personalizado" style="display:none;">
-        <div class="filter-row">
-          <input type="date" class="neu-input" id="dateFrom">
-          <input type="date" class="neu-input" id="dateTo">
-          <button class="clay-btn" style="width:auto;padding:0 1.25rem;" onclick="cargarRangoPersonalizado()">🔍</button>
-        </div>
-        <div class="scroll-container" id="rangoContainer">
-          <div style="text-align:center;padding:2rem;color:var(--text-muted);">Selecciona un rango de fechas</div>
-        </div>
-        <button class="clay-btn secondary" style="margin-top:1rem;" onclick="exportarCSVRango()">📥 Exportar CSV</button>
+        <div class="hoy-date-label" id="hoyDateLabel"></div>
+        <div class="scroll-container" id="adminDataContainer"><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div></div>
+        <button class="clay-btn secondary sm" style="margin-top:1rem;" onclick="exportarCSV()"><span class="ico">📥</span> Exportar CSV</button>
       </div>
 
       <!-- TAB USUARIOS -->
       <div id="tab-usuarios" style="display:none;">
         <div id="usuariosListView">
-          <div class="scroll-container" id="usuariosContainer">
-            <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
-            <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
+          <div class="filter-row">
+            <select class="neu-select" id="filtroSede" onchange="filtrarUsuarios()"><option value="todas">🏢 Todas las sedes</option></select>
           </div>
+          <div class="filter-row">
+            <select class="neu-select" id="filtroEstatus" onchange="filtrarUsuarios()">
+              <option value="todos">Todos los estatus</option>
+              <option value="activo">✅ Activos</option>
+              <option value="inactivo">⛔ Inactivos</option>
+            </select>
+          </div>
+          <div class="scroll-container" id="usuariosContainer"><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div></div>
         </div>
         <div id="usuarioDetailView" style="display:none;"></div>
       </div>
@@ -351,10 +242,14 @@
           </div>
           <div class="calendar-days" id="calendarDays"></div>
         </div>
-        <div style="display:flex;gap:12px;justify-content:center;font-size:0.7rem;color:var(--text-muted);margin-bottom:0.5rem;">
-          <span>🟢 Normal</span><span>🟡 Tarde/Salida temprana</span><span>🔴 Inasistencia</span>
+        <div class="legend"><span>🟢 Normal</span><span>🟡 Tarde</span><span>🔴 Inasistencia</span></div>
+        <div class="filter-row">
+          <input type="date" class="neu-input" id="calDesde">
+          <input type="date" class="neu-input" id="calHasta">
+          <button class="clay-btn sm" style="width:auto;padding:0.7rem 1.2rem;" onclick="buscarRangoCalendario()"><span class="ico">🔍</span></button>
         </div>
-        <div id="calendarDetails" style="color:var(--text-secondary);font-size:0.82rem;text-align:center;">Selecciona un día</div>
+        <div class="scroll-container" id="rangoCalContainer" style="margin-top:0.5rem;"></div>
+        <button class="clay-btn secondary sm" style="margin-top:0.75rem;" onclick="exportarCSVRango()"><span class="ico">📥</span> Exportar CSV Rango</button>
       </div>
     </div>
   </div>
@@ -363,13 +258,10 @@
   <div id="success-modal" class="modal-overlay">
     <div class="modal-card glass-panel">
       <div class="success-photo-container">
-        <div class="success-photo-ring">
-          <img id="successPhoto" src="" alt="" style="display:none;">
-          <div class="success-photo-placeholder" id="successPhotoPlaceholder">👤</div>
-        </div>
+        <div class="success-photo-ring"><img id="successPhoto" src="" alt="" style="display:none;"><div class="success-photo-placeholder" id="successPhotoPlaceholder">👤</div></div>
         <div class="success-check">✓</div>
       </div>
-      <h2 id="successTitle">¡Asistencia Registrada!</h2>
+      <h2 id="successTitle">¡Entrada Registrada!</h2>
       <p class="modal-name" id="successName"></p>
       <div class="success-details">
         <div class="detail-item"><span class="detail-label">🏢 Sede</span><span class="detail-value" id="successSede">-</span></div>
@@ -381,526 +273,360 @@
       <button class="clay-btn" onclick="closeSuccessModal()">Continuar</button>
     </div>
   </div>
-
   <div id="toast" class="toast"></div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
-    const ADMIN_KEY = "combox2026";
+    const API_URL="https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
+    const ADMIN_KEY="combox2026";
+    let SEDES=[],currentMonth=new Date().getMonth(),currentYear=new Date().getFullYear();
+    let calendarData={},reportCache={},rangoCache=[],usuariosCache=[],selectedHoyDate=null;
 
-    let SEDES = [];
-    let currentMonth = new Date().getMonth();
-    let currentYear = new Date().getFullYear();
-    let calendarData = {};
-    let reportCache = {};
-    let rangoCache = [];
-    let lastResponse = null;
+    // Fecha local (FIX del bug UTC)
+    function fechaLocal(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+    function inicioMesActual(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;}
+    function dosNombres(n){return(n||'').split(' ').slice(0,2).join(' ');}
+    function formatFechaLegible(ds){const[y,m,d]=ds.split('-');return `${d}/${m}/${y}`;}
 
     // ==========================================
-    // INIT — ROUTING PRIMERO (rápido para admin)
+    // INIT — Routing inmediato
     // ==========================================
-    document.addEventListener("DOMContentLoaded", () => {
-      createParticles();
-      initRipple();
-
-      const params = new URLSearchParams(window.location.search);
-      const isAdmin = params.get('admin') === 'true' && params.get('key') === ADMIN_KEY;
-
-      if (isAdmin) {
+    document.addEventListener("DOMContentLoaded",()=>{
+      createParticles();initRipple();
+      const params=new URLSearchParams(window.location.search);
+      if(params.get('admin')==='true'&&params.get('key')===ADMIN_KEY){
         showView('admin-view');
-        cargarDatosAdmin();
-        cargarReporteMensual();
-        cargarUsuarios();
-      } else {
-        showView('employee-view');
-        initCamera();
-        cargarSedesRemotas();
-        restaurarCedulaCache();
+        selectedHoyDate=fechaLocal();
+        document.getElementById('hoyDateLabel').textContent='📅 '+formatFechaLegible(selectedHoyDate);
+        document.getElementById('calHasta').value=fechaLocal();
+        document.getElementById('calDesde').value=inicioMesActual();
+        cargarDatosAdmin();cargarReporteMensual();cargarUsuarios();
+      }else{
+        showView('employee-view');initCamera();cargarSedesRemotas();restaurarCedulaCache();
       }
     });
 
-    function showView(id) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+    function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');}
+    function createParticles(){const c=document.getElementById('particles');const cols=['var(--accent-green)','var(--accent-cyan)','var(--accent-purple)'];for(let i=0;i<10;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*18+'s';p.style.animationDuration=(12+Math.random()*10)+'s';p.style.background=cols[Math.floor(Math.random()*cols.length)];c.appendChild(p);}}
+    function initRipple(){document.addEventListener('click',e=>{const btn=e.target.closest('.clay-btn');if(!btn)return;const r=document.createElement('span');const rect=btn.getBoundingClientRect();const s=Math.max(rect.width,rect.height);r.className='ripple';r.style.width=r.style.height=s+'px';r.style.left=(e.clientX-rect.left-s/2)+'px';r.style.top=(e.clientY-rect.top-s/2)+'px';btn.appendChild(r);setTimeout(()=>r.remove(),600);});}
+
+    // ==========================================
+    // CÁMARA
+    // ==========================================
+    async function initCamera(){
+      const video=document.getElementById('scannerVideo'),ph=document.getElementById('scannerPlaceholder'),txt=document.getElementById('scannerText');
+      try{const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:320},height:{ideal:320}},audio:false});video.srcObject=stream;await video.play();txt.textContent='Cámara activa';localStorage.setItem('combox_cam_ok','1');}
+      catch(err){video.style.display='none';ph.style.display='grid';txt.textContent='⚠ Cámara no disponible';}
     }
 
     // ==========================================
-    // PARTÍCULAS + RIPPLE
+    // CÉDULA CACHÉ
     // ==========================================
-    function createParticles() {
-      const c = document.getElementById('particles');
-      const colors = ['var(--accent-green)','var(--accent-cyan)','var(--accent-purple)'];
-      for (let i = 0; i < 10; i++) {
-        const p = document.createElement('div'); p.className = 'particle';
-        p.style.left = Math.random()*100+'%'; p.style.animationDelay = Math.random()*18+'s';
-        p.style.animationDuration = (12+Math.random()*10)+'s';
-        p.style.background = colors[Math.floor(Math.random()*colors.length)];
-        c.appendChild(p);
-      }
-    }
-    function initRipple() {
-      document.addEventListener('click', e => {
-        const btn = e.target.closest('.clay-btn');
-        if (!btn) return;
-        const r = document.createElement('span'); const rect = btn.getBoundingClientRect();
-        const s = Math.max(rect.width, rect.height);
-        r.className = 'ripple'; r.style.width = r.style.height = s+'px';
-        r.style.left = (e.clientX-rect.left-s/2)+'px'; r.style.top = (e.clientY-rect.top-s/2)+'px';
-        btn.appendChild(r); setTimeout(() => r.remove(), 600);
-      });
-    }
-
-    // ==========================================
-    // CÁMARA (inicio inmediato)
-    // ==========================================
-    async function initCamera() {
-      const video = document.getElementById('scannerVideo');
-      const ph = document.getElementById('scannerPlaceholder');
-      const txt = document.getElementById('scannerText');
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 320 } }, audio: false
-        });
-        video.srcObject = stream;
-        await video.play();
-        txt.textContent = 'Cámara activa';
-        localStorage.setItem('combox_cam_ok', '1');
-      } catch (err) {
-        video.style.display = 'none'; ph.style.display = 'grid';
-        txt.textContent = '⚠ Cámara no disponible';
-      }
-    }
-
-    // ==========================================
-    // CÉDULA EN CACHÉ
-    // ==========================================
-    function restaurarCedulaCache() {
-      const cached = localStorage.getItem('combox_cedula');
-      if (cached) {
-        document.getElementById('cedulaInput').value = cached;
-        document.getElementById('cedulaInput').disabled = true;
-        document.getElementById('changeUserLink').style.display = 'block';
-      }
-    }
-    function guardarCedulaCache(cedula) {
-      localStorage.setItem('combox_cedula', cedula);
-      document.getElementById('cedulaInput').value = cedula;
-      document.getElementById('cedulaInput').disabled = true;
-      document.getElementById('changeUserLink').style.display = 'block';
-    }
-    function cambiarUsuario() {
-      localStorage.removeItem('combox_cedula');
-      localStorage.removeItem('combox_usuario');
-      document.getElementById('cedulaInput').value = '';
-      document.getElementById('cedulaInput').disabled = false;
-      document.getElementById('changeUserLink').style.display = 'none';
-    }
+    function restaurarCedulaCache(){const c=localStorage.getItem('combox_cedula');if(c){document.getElementById('cedulaInput').value=c;document.getElementById('cedulaInput').disabled=true;document.getElementById('changeUserLink').style.display='block';}}
+    function guardarCedulaCache(c){localStorage.setItem('combox_cedula',c);document.getElementById('cedulaInput').value=c;document.getElementById('cedulaInput').disabled=true;document.getElementById('changeUserLink').style.display='block';}
+    function cambiarUsuario(){localStorage.removeItem('combox_cedula');localStorage.removeItem('combox_usuario');document.getElementById('cedulaInput').value='';document.getElementById('cedulaInput').disabled=false;document.getElementById('changeUserLink').style.display='none';}
 
     // ==========================================
     // SEDES
     // ==========================================
-    async function cargarSedesRemotas() {
-      try {
-        const res = await fetch(`${API_URL}?action=getSedes`);
-        const data = await res.json();
-        if (data.success && data.sedes) SEDES = data.sedes;
-      } catch (e) {
-        SEDES = [
-          { id: 'Naguanagua, Las Quintas', nombre: 'Naguanagua, Las Quintas', lat: 10.2485928, lng: -68.0102189, radio: 50 },
-          { id: 'Av Bolivar, Norte', nombre: 'Av Bolivar, Norte', lat: 10.2078442, lng: -68.0073244, radio: 50 }
-        ];
-      }
-    }
-    function calcularDistancia(lat1, lng1, lat2, lng2) {
-      const R = 6371; const dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
-      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    }
-    function detectarSedeCercana(lat, lng) {
-      if (!SEDES.length) return null;
-      let cercana = null, distMin = Infinity;
-      SEDES.forEach(s => { const d = calcularDistancia(lat, lng, s.lat, s.lng); if (d < distMin) { distMin = d; cercana = { ...s, distancia: d }; } });
-      return cercana;
-    }
-    function mostrarSedeUI(nombre, distancia) {
-      document.getElementById('sedeIndicator').style.display = 'flex';
-      document.getElementById('sedeText').textContent = `Sede: ${nombre}`;
-      document.getElementById('sedeDist').textContent = distancia < 1 ? `${Math.round(distancia*1000)} m` : `${distancia.toFixed(1)} km`;
-    }
+    async function cargarSedesRemotas(){try{const res=await fetch(`${API_URL}?action=getSedes`);const data=await res.json();if(data.success&&data.sedes)SEDES=data.sedes;}catch(e){SEDES=[{id:'Naguanagua, Las Quintas',nombre:'Naguanagua, Las Quintas',lat:10.2485928,lng:-68.0102189,radio:50},{id:'Av Bolivar, Norte',nombre:'Av Bolivar, Norte',lat:10.2078442,lng:-68.0073244,radio:50}];}}
+    function calcularDistancia(lat1,lng1,lat2,lng2){const R=6371;const dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+    function detectarSedeCercana(lat,lng){if(!SEDES.length)return null;let c=null,dm=Infinity;SEDES.forEach(s=>{const d=calcularDistancia(lat,lng,s.lat,s.lng);if(d<dm){dm=d;c={...s,distancia:d};}});return c;}
+    function mostrarSedeUI(n,d){document.getElementById('sedeIndicator').style.display='flex';document.getElementById('sedeText').textContent=`Sede: ${n}`;document.getElementById('sedeDist').textContent=d<1?`${Math.round(d*1000)} m`:`${d.toFixed(1)} km`;}
 
     // ==========================================
-    // TOAST + MENSAJES
+    // TOAST
     // ==========================================
-    function showToast(text, type = 'success') {
-      const t = document.getElementById('toast');
-      t.textContent = (type === 'success' ? '✓ ' : '⚠ ') + text;
-      t.className = 'toast ' + type;
-      setTimeout(() => t.classList.add('show'), 10);
-      setTimeout(() => t.classList.remove('show'), 3000);
-    }
-    function mostrarMensaje(texto, clase) {
-      const m = document.getElementById('statusMessage'); m.textContent = texto; m.className = 'status-msg ' + clase;
-    }
-    function finalizarCarga() {
-      document.getElementById('btnText').style.display = 'block';
-      document.getElementById('btnLoader').style.display = 'none';
-    }
+    function showToast(t,type='success'){const el=document.getElementById('toast');el.textContent=(type==='success'?'✓ ':'⚠ ')+t;el.className='toast '+type;setTimeout(()=>el.classList.add('show'),10);setTimeout(()=>el.classList.remove('show'),3000);}
+    function mostrarMensaje(t,c){const m=document.getElementById('statusMessage');m.textContent=t;m.className='status-msg '+c;}
+    function finalizarCarga(){document.getElementById('btnText').style.display='block';document.getElementById('btnLoader').style.display='none';}
 
     // ==========================================
     // MARCAR ASISTENCIA
     // ==========================================
-    async function marcarAsistencia() {
-      const cedula = document.getElementById('cedulaInput').value.trim();
-      if (!cedula) { showToast('Ingresa tu cédula', 'error'); return; }
-
-      document.getElementById('btnText').style.display = 'none';
-      document.getElementById('btnLoader').style.display = 'block';
-      mostrarMensaje('📡 Obteniendo GPS...', '');
-
-      if (!navigator.geolocation) { finalizarCarga(); showToast('GPS no soportado', 'error'); return; }
-
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        const lat = pos.coords.latitude, lng = pos.coords.longitude;
-        const sede = detectarSedeCercana(lat, lng);
-        if (sede) mostrarSedeUI(sede.nombre, sede.distancia);
-        mostrarMensaje('⏳ Registrando...', '');
-
-        const payload = { action: "marcar", cedula, latitud: lat, longitud: lng, sede: sede ? sede.nombre : '', sedeId: sede ? sede.id : null };
-
-        try {
-          const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
-          const data = await res.json();
-          finalizarCarga();
-
-          if (data.success) {
-            guardarCedulaCache(cedula);
-            lastResponse = data;
-            localStorage.setItem('combox_usuario', JSON.stringify(data));
-            showSuccessModal(data);
-            if (data.tipo === 'entrada') launchConfetti();
-          } else {
-            showToast(data.message, 'error'); mostrarMensaje(data.message, 'error');
-          }
-        } catch (e) {
-          finalizarCarga(); showToast('Error de conexión', 'error');
-        }
-      }, () => { finalizarCarga(); showToast('Permite el acceso al GPS', 'error'); },
-      { enableHighAccuracy: true, timeout: 15000 });
+    async function marcarAsistencia(){
+      const cedula=document.getElementById('cedulaInput').value.trim();
+      if(!cedula){showToast('Ingresa tu cédula','error');return;}
+      document.getElementById('btnText').style.display='none';document.getElementById('btnLoader').style.display='block';
+      mostrarMensaje('📡 Obteniendo GPS...','');
+      if(!navigator.geolocation){finalizarCarga();showToast('GPS no soportado','error');return;}
+      navigator.geolocation.getCurrentPosition(async(pos)=>{
+        const lat=pos.coords.latitude,lng=pos.coords.longitude;
+        const sede=detectarSedeCercana(lat,lng);if(sede)mostrarSedeUI(sede.nombre,sede.distancia);
+        mostrarMensaje('⏳ Registrando...','');
+        const payload={action:"marcar",cedula,latitud:lat,longitud:lng,sede:sede?sede.nombre:'',sedeId:sede?sede.id:null};
+        try{
+          const res=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'text/plain;charset=utf-8'}});
+          const data=await res.json();finalizarCarga();
+          if(data.success){guardarCedulaCache(cedula);localStorage.setItem('combox_usuario',JSON.stringify(data));showSuccessModal(data);if(data.tipo==='entrada')launchConfetti();}
+          else{showToast(data.message,'error');mostrarMensaje(data.message,'error');}
+        }catch(e){finalizarCarga();showToast('Error de conexión','error');}
+      },()=>{finalizarCarga();showToast('Permite el acceso al GPS','error');},{enableHighAccuracy:true,timeout:15000});
     }
-
-    function registrarSalida() {
-      closeSuccessModal();
-      setTimeout(() => marcarAsistencia(), 300);
-    }
+    function registrarSalida(){closeSuccessModal();setTimeout(()=>marcarAsistencia(),300);}
 
     // ==========================================
-    // MODAL DE ÉXITO
+    // MODAL
     // ==========================================
-    function showSuccessModal(data) {
-      const photo = document.getElementById('successPhoto');
-      const placeholder = document.getElementById('successPhotoPlaceholder');
-      const fotoUrl = data.foto_cedula || '';
-
-      if (fotoUrl.startsWith('http')) { photo.src = fotoUrl; photo.style.display = 'block'; placeholder.style.display = 'none'; }
-      else { photo.style.display = 'none'; placeholder.style.display = 'grid'; }
-
-      document.getElementById('successTitle').textContent = data.tipo === 'salida' ? '¡Salida Registrada!' : '¡Entrada Registrada!';
-      document.getElementById('successName').textContent = data.nombre || 'Empleado';
-      document.getElementById('successSede').textContent = data.sede || '-';
-      document.getElementById('successTime').textContent = data.hora || new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('successEstatus').textContent = data.estatus || '-';
-      document.getElementById('successHorario').textContent =
-        (data.hora_asignada_entrada || '--:--') + ' - ' + (data.hora_asignada_salida || '--:--');
-
-      // Botón de salida: solo si es entrada Y la hora actual es antes de la salida asignada
-      const btnSalida = document.getElementById('btnRegistrarSalida');
-      if (data.tipo === 'entrada' && data.hora_asignada_salida) {
-        const ahora = new Date();
-        const [h, m] = data.hora_asignada_salida.split(':').map(Number);
-        const horaSalida = new Date(); horaSalida.setHours(h, m, 0, 0);
-        btnSalida.style.display = ahora < horaSalida ? 'block' : 'none';
-      } else {
-        btnSalida.style.display = 'none';
-      }
-
+    function showSuccessModal(data){
+      const photo=document.getElementById('successPhoto'),ph=document.getElementById('successPhotoPlaceholder');
+      const fu=data.foto_cedula||'';
+      if(fu.startsWith('http')){photo.src=fu;photo.style.display='block';ph.style.display='none';}else{photo.style.display='none';ph.style.display='grid';}
+      document.getElementById('successTitle').textContent=data.tipo==='salida'?'¡Salida Registrada!':'¡Entrada Registrada!';
+      document.getElementById('successName').textContent=data.nombre||'Empleado';
+      document.getElementById('successSede').textContent=data.sede||'-';
+      document.getElementById('successTime').textContent=data.hora||new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('successEstatus').textContent=data.estatus||'-';
+      document.getElementById('successHorario').textContent=(data.hora_asignada_entrada||'--:--')+' - '+(data.hora_asignada_salida||'--:--');
+      const btnS=document.getElementById('btnRegistrarSalida');
+      if(data.tipo==='entrada'&&data.hora_asignada_salida){const ahora=new Date();const[h,m]=data.hora_asignada_salida.split(':').map(Number);const hs=new Date();hs.setHours(h,m,0,0);btnS.style.display=ahora<hs?'block':'none';}else{btnS.style.display='none';}
       document.getElementById('success-modal').classList.add('show');
     }
-    function closeSuccessModal() { document.getElementById('success-modal').classList.remove('show'); }
+    function closeSuccessModal(){document.getElementById('success-modal').classList.remove('show');}
+    function launchConfetti(){const cols=['#10f5a5','#22d3ee','#a855f7','#ec4899','#fbbf24','#f87171','#34d399'];for(let i=0;i<100;i++){const c=document.createElement('div');c.className='confetti-piece';const s=6+Math.random()*10;c.style.left=Math.random()*100+'vw';c.style.background=cols[Math.floor(Math.random()*cols.length)];c.style.animationDelay=Math.random()*0.8+'s';c.style.animationDuration=(2.5+Math.random()*2.5)+'s';c.style.width=c.style.height=s+'px';c.style.borderRadius=Math.random()>0.5?'50%':'2px';document.body.appendChild(c);setTimeout(()=>c.remove(),5500);}}
 
     // ==========================================
-    // CONFETTI
+    // ADMIN — TABS
     // ==========================================
-    function launchConfetti() {
-      const colors = ['#10f5a5','#22d3ee','#a855f7','#ec4899','#fbbf24','#f87171','#34d399'];
-      for (let i = 0; i < 100; i++) {
-        const c = document.createElement('div'); c.className = 'confetti-piece';
-        const size = 6 + Math.random()*10;
-        c.style.left = Math.random()*100+'vw';
-        c.style.background = colors[Math.floor(Math.random()*colors.length)];
-        c.style.animationDelay = Math.random()*0.8+'s';
-        c.style.animationDuration = (2.5+Math.random()*2.5)+'s';
-        c.style.width = c.style.height = size+'px';
-        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 5500);
-      }
-    }
-
-    // ==========================================
-    // ADMIN
-    // ==========================================
-    function switchTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    function switchTab(tab){
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      ['hoy','personalizado','usuarios','calendario'].forEach(t => {
-        document.getElementById('tab-'+t).style.display = t === tab ? 'block' : 'none';
-      });
-      if (tab === 'calendario') renderCalendar();
-      if (tab === 'usuarios') { document.getElementById('usuariosListView').style.display = 'block'; document.getElementById('usuarioDetailView').style.display = 'none'; }
+      ['hoy','usuarios','calendario'].forEach(t=>{document.getElementById('tab-'+t).style.display=t===tab?'block':'none';});
+      if(tab==='calendario')renderCalendar();
+      if(tab==='usuarios'){document.getElementById('usuariosListView').style.display='block';document.getElementById('usuarioDetailView').style.display='none';}
     }
 
-    function dosNombres(nombre) { return (nombre || '').split(' ').slice(0, 2).join(' '); }
-
-    async function cargarDatosAdmin() {
-      const container = document.getElementById('adminDataContainer');
-      const date = new Date().toISOString().split('T')[0];
-      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
-
-      try {
-        const res = await fetch(`${API_URL}?action=getReport&date=${date}`);
-        const data = await res.json();
-        if (data.success && data.records) { renderReport(data.records, container); reportCache[date] = data.records; }
-        else { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">📭 No hay registros hoy</div>`; }
-      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error al conectar</div>`; }
+    // ==========================================
+    // TAB HOY (usa fecha local)
+    // ==========================================
+    async function cargarDatosAdmin(){
+      const container=document.getElementById('adminDataContainer');
+      const date=selectedHoyDate||fechaLocal();
+      container.innerHTML=`<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
+      try{
+        const res=await fetch(`${API_URL}?action=getReport&date=${date}`);
+        const data=await res.json();
+        if(data.success&&data.records){renderReport(data.records,container);reportCache[date]=data.records;}
+        else{container.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-muted)">📭 No hay registros</div>`;document.getElementById('statPresent').textContent='0';document.getElementById('statLate').textContent='0';document.getElementById('statTotal').textContent='0';}
+      }catch(e){container.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error al conectar</div>`;}
     }
 
-    function renderReport(records, container) {
-      const present = records.filter(r => r.entrada).length;
-      const late = records.filter(r => r.estado === 'late').length;
-      document.getElementById('statPresent').textContent = present;
-      document.getElementById('statLate').textContent = late;
-      document.getElementById('statTotal').textContent = records.length;
-
-      if (!records.length) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`; return; }
-
-      container.innerHTML = records.map(r => {
-        const bc = r.estado === 'late' ? 'badge-late' : r.estado === 'absent' ? 'badge-absent' : 'badge-on-time';
-        const bt = r.estado === 'late' ? 'Atrasado' : r.estado === 'absent' ? 'Ausente' : 'A Tiempo';
-        const cc = r.estado === 'late' ? 'late' : r.estado === 'absent' ? 'absent' : '';
-        return `<div class="admin-card ${cc}">
-          <div class="admin-info">
-            <h3>${dosNombres(r.nombre)}</h3>
-            <p>Entrada: ${r.entrada || '--:--'} &nbsp;|&nbsp; Salida: ${r.salida || '--:--'}</p>
-          </div>
-          <div class="admin-badge ${bc}">${bt}</div>
-        </div>`;
+    function renderReport(records,container){
+      const present=records.filter(r=>r.entrada).length;
+      const late=records.filter(r=>r.estado==='late').length;
+      document.getElementById('statPresent').textContent=present;
+      document.getElementById('statLate').textContent=late;
+      document.getElementById('statTotal').textContent=records.length;
+      if(!records.length){container.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`;return;}
+      container.innerHTML=records.map(r=>{
+        const bc=r.estado==='late'?'badge-late':r.estado==='absent'?'badge-absent':'badge-on-time';
+        const bt=r.estado==='late'?'Atrasado':r.estado==='absent'?'Ausente':'A Tiempo';
+        const cc=r.estado==='late'?'late':r.estado==='absent'?'absent':'';
+        return `<div class="admin-card ${cc}"><div class="admin-info"><h3>${dosNombres(r.nombre)}</h3><p>Entrada: ${r.entrada||'--:--'} &nbsp;|&nbsp; Salida: ${r.salida||'--:--'}</p></div><div class="admin-badge ${bc}">${bt}</div></div>`;
       }).join('');
     }
 
-    // RANGO PERSONALIZADO
-    async function cargarRangoPersonalizado() {
-      const from = document.getElementById('dateFrom').value;
-      const to = document.getElementById('dateTo').value;
-      const container = document.getElementById('rangoContainer');
-      if (!from || !to) { showToast('Selecciona ambas fechas', 'error'); return; }
-
-      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
-
-      try {
-        const res = await fetch(`${API_URL}?action=getReportRango&from=${from}&to=${to}`);
-        const data = await res.json();
-        if (data.success && data.records && data.records.length) {
-          rangoCache = data.records;
-          container.innerHTML = data.records.map(r => {
-            const bc = r.estado === 'late' ? 'badge-late' : r.estado === 'absent' ? 'badge-absent' : 'badge-on-time';
-            const bt = r.estado === 'late' ? 'Atrasado' : r.estado === 'absent' ? 'Ausente' : 'A Tiempo';
-            const cc = r.estado === 'late' ? 'late' : r.estado === 'absent' ? 'absent' : '';
-            return `<div class="admin-card ${cc}">
-              <div class="admin-info"><h3>${dosNombres(r.nombre)} <span style="font-size:0.65rem;color:var(--text-muted)">${r.fecha || ''}</span></h3>
-              <p>Entrada: ${r.entrada || '--:--'} | Salida: ${r.salida || '--:--'}</p></div>
-              <div class="admin-badge ${bc}">${bt}</div></div>`;
-          }).join('');
-        } else { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros en el rango</div>`; }
-      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; }
-    }
-
-    // USUARIOS
-    async function cargarUsuarios() {
-      const container = document.getElementById('usuariosContainer');
-      try {
-        const res = await fetch(`${API_URL}?action=getUsuarios`);
-        const data = await res.json();
-        if (data.success && data.usuarios) {
-          const porSede = {};
-          data.usuarios.forEach(u => {
-            const sede = u.sede || 'Sin sede';
-            if (!porSede[sede]) porSede[sede] = [];
-            porSede[sede].push(u);
-          });
-
-          let html = '';
-          Object.keys(porSede).sort().forEach(sede => {
-            html += `<div class="sede-group-title">🏢 ${sede} (${porSede[sede].length})</div>`;
-            porSede[sede].forEach(u => {
-              const est = String(u.estatus).toLowerCase() === 'activo' ? 'badge-active' : 'badge-inactive';
-              const estTxt = u.estatus === 'activo' ? 'Activo' : 'Inactivo';
-              html += `<div class="admin-card clickable" onclick="verDetalleUsuario('${u.cedula}')">
-                <div class="admin-info"><h3>${dosNombres(u.nombre_trabajador)}</h3><p>${u.cedula}</p></div>
-                <div class="admin-badge ${est}">${estTxt}</div></div>`;
-            });
-          });
-          container.innerHTML = html || `<div style="text-align:center;padding:2rem;color:var(--text-muted)">No hay usuarios</div>`;
+    // ==========================================
+    // TAB USUARIOS (1 sola carga, filtro en frontend)
+    // ==========================================
+    async function cargarUsuarios(){
+      const container=document.getElementById('usuariosContainer');
+      try{
+        const res=await fetch(`${API_URL}?action=getUsuarios`);
+        const data=await res.json();
+        if(data.success&&data.usuarios){
+          usuariosCache=data.usuarios;
+          // Poblar filtro de sedes
+          const sedes=[...new Set(usuariosCache.map(u=>u.sede||'Sin sede'))].sort();
+          const sel=document.getElementById('filtroSede');
+          sel.innerHTML='<option value="todas">🏢 Todas las sedes</option>'+sedes.map(s=>`<option value="${s}">${s}</option>`).join('');
+          filtrarUsuarios();
         }
-      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; }
+      }catch(e){container.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`;}
     }
 
-    async function verDetalleUsuario(cedula) {
-      document.getElementById('usuariosListView').style.display = 'none';
-      const detail = document.getElementById('usuarioDetailView');
-      detail.style.display = 'block';
-      detail.innerHTML = `<div class="skeleton" style="height:200px;"></div>`;
+    function filtrarUsuarios(){
+      const sede=document.getElementById('filtroSede').value;
+      const estatus=document.getElementById('filtroEstatus').value;
+      const container=document.getElementById('usuariosContainer');
+      let filtered=usuariosCache;
+      if(sede!=='todas')filtered=filtered.filter(u=>(u.sede||'Sin sede')===sede);
+      if(estatus!=='todos')filtered=filtered.filter(u=>String(u.estatus).toLowerCase()===estatus);
 
-      try {
-        const res = await fetch(`${API_URL}?action=getDetalleUsuario&cedula=${cedula}`);
-        const data = await res.json();
-        if (!data.success) { detail.innerHTML = `<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">Error al cargar</p>`; return; }
+      if(!filtered.length){container.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-muted)">No hay usuarios con estos filtros</div>`;return;}
 
-        const u = data.usuario;
-        const stats = data.stats;
-        const fotoUrl = u.foto_cedula || '';
-        const fotoHtml = fotoUrl.startsWith('http')
-          ? `<img class="user-detail-photo" src="${fotoUrl}" alt="">`
-          : `<div class="user-detail-photo-ph">👤</div>`;
-
-        let calHtml = renderMiniCalendario(data.registros);
-
-        let registrosHtml = (data.registros || []).slice(-20).reverse().map(r => {
-          const dot = r.estado === 'late' ? '🟡' : r.estado === 'absent' ? '🔴' : '🟢';
-          return `<div class="admin-card" style="border-left-color:${r.estado==='late'?'var(--accent-gold)':r.estado==='absent'?'var(--text-muted)':'var(--accent-green)'}">
-            <div class="admin-info"><h3>${dot} ${r.fecha}</h3>
-            <p>Entrada: ${r.entrada || '--:--'} | Salida: ${r.salida || '--:--'}</p></div>
-            <div class="admin-badge ${r.estado==='late'?'badge-late':r.estado==='absent'?'badge-absent':'badge-on-time'}">${r.estado==='late'?'Tarde':r.estado==='absent'?'Ausente':'OK'}</div></div>`;
-        }).join('');
-
-        detail.innerHTML = `
-          <button class="back-btn" onclick="volverUsuarios()">← Volver a usuarios</button>
-          <div class="user-detail-header">${fotoHtml}
-            <div class="user-detail-info"><h3>${u.nombre_trabajador}</h3>
-            <p>${u.sede || 'Sin sede'} · ${u.estatus} · C.I: ${u.cedula}</p>
-            <p style="font-size:0.7rem;color:var(--accent-cyan);">Horario: ${u.horario_nombre || 'N/A'}</p></div>
-          </div>
-          <div class="user-stats">
-            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-green)">${stats.asistencias}</div><div class="user-stat-lbl">Asistencias</div></div>
-            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-gold)">${stats.atrasos}</div><div class="user-stat-lbl">Atrasos</div></div>
-            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-red)">${stats.inasistencias}</div><div class="user-stat-lbl">Inasistencias</div></div>
-          </div>
-          <h3 style="font-size:0.85rem;margin-bottom:0.5rem;">📆 Calendario de registros</h3>
-          ${calHtml}
-          <h3 style="font-size:0.85rem;margin:1rem 0 0.5rem;">📋 Últimos registros</h3>
-          <div class="scroll-container" style="max-height:250px;">${registrosHtml || '<p style="color:var(--text-muted)">Sin registros</p>'}</div>`;
-      } catch (e) { detail.innerHTML = `<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">⚠ Error de conexión</p>`; }
+      // Agrupar por sede
+      const porSede={};
+      filtered.forEach(u=>{const s=u.sede||'Sin sede';if(!porSede[s])porSede[s]=[];porSede[s].push(u);});
+      let html='';
+      Object.keys(porSede).sort().forEach(s=>{
+        html+=`<div class="sede-group-title">🏢 ${s} (${porSede[s].length})</div>`;
+        porSede[s].forEach(u=>{
+          const est=String(u.estatus).toLowerCase()==='activo'?'badge-active':'badge-inactive';
+          const estTxt=String(u.estatus).toLowerCase()==='activo'?'Activo':'Inactivo';
+          html+=`<div class="admin-card clickable" onclick="verDetalleUsuario('${u.cedula}')"><div class="admin-info"><h3>${dosNombres(u.nombre_trabajador)}</h3><p>C.I: ${u.cedula}</p></div><div class="admin-badge ${est}">${estTxt}</div></div>`;
+        });
+      });
+      container.innerHTML=html;
     }
 
-    function volverUsuarios() {
-      document.getElementById('usuariosListView').style.display = 'block';
-      document.getElementById('usuarioDetailView').style.display = 'none';
+    // ==========================================
+    // DETALLE USUARIO (stats por rango)
+    // ==========================================
+    let detalleRegistros=[],detalleUsuario=null;
+
+    async function verDetalleUsuario(cedula){
+      document.getElementById('usuariosListView').style.display='none';
+      const detail=document.getElementById('usuarioDetailView');
+      detail.style.display='block';
+      detail.innerHTML=`<div class="skeleton" style="height:250px;"></div>`;
+      try{
+        const res=await fetch(`${API_URL}?action=getDetalleUsuario&cedula=${cedula}`);
+        const data=await res.json();
+        if(!data.success){detail.innerHTML=`<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">Error</p>`;return;}
+        detalleUsuario=data.usuario;detalleRegistros=data.registros||[];
+        renderDetalleUsuario(inicioMesActual(),fechaLocal());
+      }catch(e){detail.innerHTML=`<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">⚠ Error de conexión</p>`;}
     }
 
-    function renderMiniCalendario(registros) {
-      const now = new Date();
-      const y = now.getFullYear(), m = now.getMonth();
-      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-      const weekdays = ['D','L','M','X','J','V','S'];
-      const firstDay = new Date(y, m, 1).getDay();
-      const daysInMonth = new Date(y, m+1, 0).getDate();
+    function renderDetalleUsuario(desde,hasta){
+      const detail=document.getElementById('usuarioDetailView');
+      const u=detalleUsuario;
+      const fotoUrl=u.foto_cedula||'';
+      const fotoHtml=fotoUrl.startsWith('http')?`<img class="user-detail-photo" src="${fotoUrl}">`:`<div class="user-detail-photo-ph">👤</div>`;
 
-      const regMap = {};
-      (registros || []).forEach(r => { regMap[r.fecha] = r.estado; });
+      // Filtrar registros por rango
+      const regs=detalleRegistros.filter(r=>r.fecha>=desde&&r.fecha<=hasta);
+      const asistencias=regs.filter(r=>r.estado==='on-time').length;
+      const atrasos=regs.filter(r=>r.estado==='late').length;
+      const inasistencias=regs.filter(r=>r.estado==='absent').length;
 
-      let html = `<div class="calendar" style="margin-bottom:0.5rem;"><div style="text-align:center;font-weight:600;font-size:0.85rem;margin-bottom:0.5rem;">${months[m]} ${y}</div><div class="calendar-days">`;
-      html += weekdays.map(w => `<div class="calendar-weekday">${w}</div>`).join('');
-      for (let i = 0; i < firstDay; i++) html += `<div></div>`;
-      for (let d = 1; d <= daysInMonth; d++) {
-        const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const estado = regMap[ds];
-        const dotColor = estado === 'late' ? 'yellow' : estado === 'absent' ? 'red' : estado ? 'green' : '';
-        const isToday = d === now.getDate();
-        html += `<div class="calendar-day${isToday?' today':''}">${d}${dotColor ? `<span class="cal-dot ${dotColor}"></span>` : ''}</div>`;
+      // Mini calendario del mes de "desde"
+      const[dy,dm]=desde.split('-').map(Number);
+      const calHtml=renderMiniCalendario(dy,dm,regs);
+
+      const regsHtml=regs.slice().reverse().map(r=>{
+        const dot=r.estado==='late'?'🟡':r.estado==='absent'?'🔴':'🟢';
+        const bc=r.estado==='late'?'badge-late':r.estado==='absent'?'badge-absent':'badge-on-time';
+        const bt=r.estado==='late'?'Tarde':r.estado==='absent'?'Ausente':'OK';
+        const cc=r.estado==='late'?'late':r.estado==='absent'?'absent':'';
+        return `<div class="admin-card ${cc}"><div class="admin-info"><h3>${dot} ${formatFechaLegible(r.fecha)}</h3><p>Entrada: ${r.entrada||'--:--'} | Salida: ${r.salida||'--:--'}</p></div><div class="admin-badge ${bc}">${bt}</div></div>`;
+      }).join('');
+
+      detail.innerHTML=`
+        <button class="back-btn" onclick="volverUsuarios()">← Volver a usuarios</button>
+        <div class="user-detail-header">${fotoHtml}<div class="user-detail-info"><h3>${u.nombre_trabajador}</h3><p>${u.sede||'Sin sede'} · ${u.estatus} · C.I: ${u.cedula}</p><p style="font-size:0.7rem;color:var(--accent-cyan);">Horario: ${u.horario_nombre||'N/A'}</p></div></div>
+        <div class="filter-row">
+          <input type="date" class="neu-input" id="detDesde" value="${desde}">
+          <input type="date" class="neu-input" id="detHasta" value="${hasta}">
+          <button class="clay-btn sm" style="width:auto;padding:0.7rem 1rem;" onclick="aplicarFiltroDetalle()"><span class="ico">🔍</span></button>
+        </div>
+        <div class="user-stats">
+          <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-green)">${asistencias}</div><div class="user-stat-lbl">Asistencias</div></div>
+          <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-gold)">${atrasos}</div><div class="user-stat-lbl">Atrasos</div></div>
+          <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-red)">${inasistencias}</div><div class="user-stat-lbl">Inasistencias</div></div>
+        </div>
+        <div class="section-title">📆 ${formatFechaLegible(desde)} — ${formatFechaLegible(hasta)}</div>
+        ${calHtml}
+        <div class="section-title">📋 Registros (${regs.length})</div>
+        <div class="scroll-container" style="max-height:220px;">${regsHtml||'<p style="color:var(--text-muted);text-align:center;padding:1rem;">Sin registros en el rango</p>'}</div>`;
+    }
+
+    function aplicarFiltroDetalle(){
+      const desde=document.getElementById('detDesde').value;
+      const hasta=document.getElementById('detHasta').value;
+      if(!desde||!hasta){showToast('Selecciona ambas fechas','error');return;}
+      renderDetalleUsuario(desde,hasta);
+    }
+
+    function volverUsuarios(){document.getElementById('usuariosListView').style.display='block';document.getElementById('usuarioDetailView').style.display='none';}
+
+    function renderMiniCalendario(year,month,regs){
+      const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      const weekdays=['D','L','M','X','J','V','S'];
+      const firstDay=new Date(year,month-1,1).getDay();
+      const daysInMonth=new Date(year,month,0).getDate();
+      const regMap={};regs.forEach(r=>{regMap[r.fecha]=r.estado;});
+      let html=`<div class="calendar" style="margin-bottom:0.5rem;"><div style="text-align:center;font-weight:600;font-size:0.82rem;margin-bottom:0.5rem;">${months[month-1]} ${year}</div><div class="calendar-days">`;
+      html+=weekdays.map(w=>`<div class="calendar-weekday">${w}</div>`).join('');
+      for(let i=0;i<firstDay;i++)html+=`<div></div>`;
+      const today=fechaLocal();
+      for(let d=1;d<=daysInMonth;d++){
+        const ds=`${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const est=regMap[ds];
+        const dot=est==='late'?'yellow':est==='absent'?'red':est?'green':'';
+        const isToday=ds===today;
+        html+=`<div class="calendar-day${isToday?' today':''}">${d}${dot?`<span class="cal-dot ${dot}"></span>`:''}</div>`;
       }
-      html += `</div></div>`;
-      return html;
+      html+=`</div></div>`;return html;
     }
 
-    // CALENDARIO GENERAL
-    async function cargarReporteMensual() {
-      try {
-        const res = await fetch(`${API_URL}?action=getReporteMensual&month=${currentMonth+1}&year=${currentYear}`);
-        const data = await res.json();
-        if (data.success) { calendarData = data.days || {}; renderCalendar(); }
-      } catch (e) { console.warn(e); }
+    // ==========================================
+    // TAB CALENDARIO
+    // ==========================================
+    async function cargarReporteMensual(){
+      try{const res=await fetch(`${API_URL}?action=getReporteMensual&month=${currentMonth+1}&year=${currentYear}`);const data=await res.json();if(data.success){calendarData=data.days||{};renderCalendar();}}catch(e){console.warn(e);}
     }
 
-    function renderCalendar() {
-      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-      const weekdays = ['D','L','M','X','J','V','S'];
-      document.getElementById('calendarMonth').textContent = `${months[currentMonth]} ${currentYear}`;
-      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-      const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-      const daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
-
-      let html = weekdays.map(w => `<div class="calendar-weekday">${w}</div>`).join('');
-      for (let i = firstDay-1; i >= 0; i--) html += `<div class="calendar-day other-month">${daysInPrev-i}</div>`;
-
-      const today = new Date();
-      for (let d = 1; d <= daysInMonth; d++) {
-        const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const isToday = today.getDate()===d && today.getMonth()===currentMonth && today.getFullYear()===currentYear;
-        const info = calendarData[ds];
-        let dotHtml = '';
-        if (info) {
-          const color = info.has_late ? 'yellow' : info.has_absent ? 'red' : 'green';
-          dotHtml = `<span class="cal-dot ${color}"></span>`;
-        }
-        html += `<div class="calendar-day${isToday?' today':''}" onclick="selectDate('${ds}')">${d}${dotHtml}</div>`;
+    function renderCalendar(){
+      const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      const weekdays=['D','L','M','X','J','V','S'];
+      document.getElementById('calendarMonth').textContent=`${months[currentMonth]} ${currentYear}`;
+      const firstDay=new Date(currentYear,currentMonth,1).getDay();
+      const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
+      const daysInPrev=new Date(currentYear,currentMonth,0).getDate();
+      let html=weekdays.map(w=>`<div class="calendar-weekday">${w}</div>`).join('');
+      for(let i=firstDay-1;i>=0;i--)html+=`<div class="calendar-day other-month">${daysInPrev-i}</div>`;
+      const today=fechaLocal();
+      for(let d=1;d<=daysInMonth;d++){
+        const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const isToday=ds===today;
+        const isSel=ds===selectedHoyDate;
+        const info=calendarData[ds];
+        let dotHtml='';
+        if(info){const color=info.has_late?'yellow':info.has_absent?'red':'green';dotHtml=`<span class="cal-dot ${color}"></span>`;}
+        html+=`<div class="calendar-day${isToday?' today':''}${isSel?' selected':''}" onclick="selectDate('${ds}')">${d}${dotHtml}</div>`;
       }
-      document.getElementById('calendarDays').innerHTML = html;
+      document.getElementById('calendarDays').innerHTML=html;
     }
 
-    function selectDate(ds) {
+    function selectDate(ds){
+      selectedHoyDate=ds;
+      document.getElementById('tabHoyLabel').textContent=formatFechaLegible(ds);
+      document.getElementById('hoyDateLabel').textContent='📅 '+formatFechaLegible(ds);
       switchTab('hoy');
-      const container = document.getElementById('adminDataContainer');
-      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div>`;
-      fetch(`${API_URL}?action=getReport&date=${ds}`).then(r => r.json()).then(data => {
-        if (data.success && data.records) { renderReport(data.records, container); reportCache[ds] = data.records; }
-        else container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`;
-      }).catch(() => { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; });
+      cargarDatosAdmin();
+      renderCalendar();
     }
 
-    function changeMonth(delta) {
-      currentMonth += delta;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-      cargarReporteMensual();
+    function changeMonth(delta){currentMonth+=delta;if(currentMonth>11){currentMonth=0;currentYear++;}if(currentMonth<0){currentMonth=11;currentYear--;}cargarReporteMensual();}
+
+    async function buscarRangoCalendario(){
+      const from=document.getElementById('calDesde').value;
+      const to=document.getElementById('calHasta').value;
+      const container=document.getElementById('rangoCalContainer');
+      if(!from||!to){showToast('Selecciona ambas fechas','error');return;}
+      container.innerHTML=`<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
+      try{
+        const res=await fetch(`${API_URL}?action=getReportRango&from=${from}&to=${to}`);
+        const data=await res.json();
+        if(data.success&&data.records&&data.records.length){
+          rangoCache=data.records;
+          container.innerHTML=data.records.map(r=>{
+            const bc=r.estado==='late'?'badge-late':r.estado==='absent'?'badge-absent':'badge-on-time';
+            const bt=r.estado==='late'?'Atrasado':r.estado==='absent'?'Ausente':'A Tiempo';
+            const cc=r.estado==='late'?'late':r.estado==='absent'?'absent':'';
+            return `<div class="admin-card ${cc}"><div class="admin-info"><h3>${dosNombres(r.nombre)} <span style="font-size:0.63rem;color:var(--text-muted)">${formatFechaLegible(r.fecha||'')}</span></h3><p>Entrada: ${r.entrada||'--:--'} | Salida: ${r.salida||'--:--'}</p></div><div class="admin-badge ${bc}">${bt}</div></div>`;
+          }).join('');
+        }else{container.innerHTML=`<div style="text-align:center;padding:1.5rem;color:var(--text-muted)">Sin registros en el rango</div>`;}
+      }catch(e){container.innerHTML=`<div style="text-align:center;padding:1.5rem;color:var(--accent-pink)">⚠ Error</div>`;}
     }
 
-    function exportarCSV() {
-      const date = new Date().toISOString().split('T')[0];
-      const records = reportCache[date];
-      if (!records || !records.length) { showToast('No hay datos', 'error'); return; }
-      descargarCSV(records, `asistencia_${date}`);
-    }
-    function exportarCSVRango() {
-      if (!rangoCache.length) { showToast('No hay datos del rango', 'error'); return; }
-      descargarCSV(rangoCache, `asistencia_rango`);
-    }
-    function descargarCSV(records, nombre) {
-      const headers = ['Nombre','Sede','Fecha','Entrada','Salida','Estado'];
-      const rows = records.map(r => [r.nombre, r.sede||'', r.fecha||'', r.entrada||'', r.salida||'', r.estado]);
-      const csv = headers.join(',') + '\n' + rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-      const blob = new Blob(['\ufeff'+csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre+'.csv'; a.click();
-      showToast('CSV descargado');
-    }
+    // ==========================================
+    // EXPORTAR
+    // ==========================================
+    function exportarCSV(){const date=selectedHoyDate||fechaLocal();const records=reportCache[date];if(!records||!records.length){showToast('No hay datos','error');return;}descargarCSV(records,`asistencia_${date}`);}
+    function exportarCSVRango(){if(!rangoCache.length){showToast('Busca un rango primero','error');return;}descargarCSV(rangoCache,'asistencia_rango');}
+    function descargarCSV(records,nombre){const headers=['Nombre','Sede','Fecha','Entrada','Salida','Estado'];const rows=records.map(r=>[r.nombre,r.sede||'',r.fecha||'',r.entrada||'',r.salida||'',r.estado]);const csv=headers.join(',')+'\n'+rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombre+'.csv';a.click();showToast('CSV descargado');}
   </script>
 </body>
 </html>
