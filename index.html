@@ -16,6 +16,7 @@
       --accent-purple: #a855f7;
       --accent-pink: #ec4899;
       --accent-gold: #fbbf24;
+      --accent-red: #ef4444;
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
@@ -23,153 +24,89 @@
       --glow-green: 0 0 30px rgba(16, 245, 165, 0.4);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
-
     body {
       background: var(--bg-primary);
       background-image:
         radial-gradient(at 20% 20%, rgba(16,245,165,0.07) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(168,85,247,0.07) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(34,211,238,0.04) 0px, transparent 50%);
-      color: var(--text-primary);
-      min-height: 100vh;
+        radial-gradient(at 80% 80%, rgba(168,85,247,0.07) 0px, transparent 50%);
+      color: var(--text-primary); min-height: 100vh;
       display: flex; justify-content: center; align-items: flex-start;
       padding: 1rem; overflow-x: hidden;
     }
-
     .bg-particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-    .particle {
-      position: absolute; width: 3px; height: 3px; border-radius: 50%;
-      opacity: 0.25; animation: floatUp 18s infinite linear;
-    }
+    .particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; opacity: 0.2; animation: floatUp 18s infinite linear; }
     @keyframes floatUp {
-      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-      10% { opacity: 0.25; } 90% { opacity: 0.25; }
-      100% { transform: translateY(-100vh) translateX(80px); opacity: 0; }
+      0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.2; }
+      90% { opacity: 0.2; } 100% { transform: translateY(-100vh) translateX(60px); opacity: 0; }
     }
-
     #app { width: 100%; max-width: 460px; z-index: 10; padding-top: 0.5rem; }
-    .view { display: none; opacity: 0; }
-    .view.active { display: block; animation: slideIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes slideIn {
-      from { transform: translateY(30px) scale(0.98); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
+    .view { display: none; }
+    .view.active { display: block; animation: slideIn 0.4s ease forwards; }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    /* GLASSMORPHISM */
     .glass-panel {
-      background: var(--bg-card);
-      backdrop-filter: blur(24px) saturate(180%);
+      background: var(--bg-card); backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border: 1px solid var(--border-glass);
-      border-radius: 28px; padding: 1.75rem 1.5rem;
+      border: 1px solid var(--border-glass); border-radius: 28px; padding: 1.75rem 1.5rem;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
       position: relative; overflow: hidden;
     }
-
     .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.4rem; }
     .logo-icon {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      width: 38px; height: 38px; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
       border-radius: 12px; display: grid; place-items: center;
       font-weight: 700; color: #0a0e1a; box-shadow: var(--glow-green); font-size: 1.1rem;
     }
-    h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
-    h1 .accent {
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    h1 { font-size: 1.6rem; font-weight: 700; }
+    h1 .accent { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem; }
 
-    /* ESCÁNER FACIAL */
+    /* ===== ESCÁNER SIMPLIFICADO: solo aro verde + cámara ===== */
     .scanner-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.25rem; }
-    .scanner-container {
-      width: 190px; height: 190px; position: relative; border-radius: 50%;
-      overflow: visible;
-    }
+    .scanner-container { width: 180px; height: 180px; position: relative; border-radius: 50%; }
     .scanner-ring {
-      position: absolute; inset: -5px; border-radius: 50%;
-      background: conic-gradient(from 0deg, var(--accent-green), var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-green));
-      animation: ringRotate 3s linear infinite; z-index: 0;
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 3px solid var(--accent-green);
+      box-shadow: 0 0 15px rgba(16,245,165,0.3), inset 0 0 15px rgba(16,245,165,0.1);
+      z-index: 0;
     }
-    @keyframes ringRotate { to { transform: rotate(360deg); } }
-    .scanner-inner {
-      position: absolute; inset: 3px; border-radius: 50%;
-      overflow: hidden; z-index: 1; background: var(--bg-secondary);
-    }
+    .scanner-inner { position: absolute; inset: 4px; border-radius: 50%; overflow: hidden; z-index: 1; background: var(--bg-secondary); }
     #scannerVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
-    .scanner-placeholder {
-      width: 100%; height: 100%; display: grid; place-items: center;
-      background: var(--bg-tertiary); color: var(--text-muted); font-size: 3rem;
-    }
+    .scanner-placeholder { width: 100%; height: 100%; display: grid; place-items: center; background: var(--bg-tertiary); color: var(--text-muted); font-size: 3rem; }
     .scan-line {
-      position: absolute; left: 12%; width: 76%; height: 2px;
+      position: absolute; left: 15%; width: 70%; height: 2px;
       background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-      box-shadow: 0 0 12px var(--accent-green), 0 0 30px rgba(16,245,165,0.3);
-      z-index: 3; border-radius: 2px; animation: scanMove 2.8s ease-in-out infinite;
+      box-shadow: 0 0 10px var(--accent-green); z-index: 3; border-radius: 2px;
+      animation: scanMove 2.8s ease-in-out infinite;
     }
-    @keyframes scanMove { 0%,100% { top: 12%; opacity: 0.6; } 50% { top: 88%; opacity: 1; } }
-    .scanner-grid {
-      position: absolute; inset: 0; z-index: 2; border-radius: 50%;
-      background-image: linear-gradient(rgba(16,245,165,0.06) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(16,245,165,0.06) 1px, transparent 1px);
-      background-size: 20px 20px; pointer-events: none;
-    }
-    .scanner-corner {
-      position: absolute; width: 22px; height: 22px;
-      border-color: var(--accent-green); border-style: solid; border-width: 0;
-      z-index: 4; filter: drop-shadow(0 0 4px var(--accent-green));
-    }
-    .scanner-corner.tl { top: 8%; left: 8%; border-top-width: 3px; border-left-width: 3px; border-radius: 6px 0 0 0; }
-    .scanner-corner.tr { top: 8%; right: 8%; border-top-width: 3px; border-right-width: 3px; border-radius: 0 6px 0 0; }
-    .scanner-corner.bl { bottom: 8%; left: 8%; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 6px; }
-    .scanner-corner.br { bottom: 8%; right: 8%; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 6px 0; }
-    .face-point {
-      position: absolute; width: 7px; height: 7px;
-      background: var(--accent-green); border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-green);
-      z-index: 5; opacity: 0; transition: opacity 0.4s ease;
-      transform: translate(-50%, -50%);
-    }
-    .scanner-container.detected .face-point { opacity: 1; animation: pointPulse 1.2s ease-in-out infinite; }
-    @keyframes pointPulse {
-      0%,100% { transform: translate(-50%,-50%) scale(1); }
-      50% { transform: translate(-50%,-50%) scale(1.5); }
-    }
+    @keyframes scanMove { 0%,100% { top: 15%; opacity: 0.5; } 50% { top: 85%; opacity: 1; } }
     .scanner-status {
-      display: flex; align-items: center; gap: 8px; margin-top: 12px;
-      font-size: 0.8rem; color: var(--text-secondary);
-      padding: 6px 16px; background: var(--bg-tertiary);
-      border-radius: 20px; border: 1px solid var(--border-glass);
+      display: flex; align-items: center; gap: 8px; margin-top: 10px;
+      font-size: 0.78rem; color: var(--text-secondary);
+      padding: 5px 14px; background: var(--bg-tertiary); border-radius: 20px; border: 1px solid var(--border-glass);
     }
-    .scanner-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); animation: pulse 1.5s infinite; }
-    .scanner-status.active .scanner-dot { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .scanner-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    /* SEDE */
     .sede-indicator {
       display: flex; align-items: center; gap: 8px;
       background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.2);
-      border-radius: 14px; padding: 0.7rem 1rem; margin-bottom: 1rem;
-      font-size: 0.82rem; color: var(--accent-cyan);
-      animation: fadeInUp 0.4s ease;
+      border-radius: 14px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: var(--accent-cyan);
     }
     .sede-indicator .sede-dist { color: var(--text-muted); font-size: 0.75rem; margin-left: auto; }
-    @keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    /* NEUMORPHISM INPUTS */
     .neu-input {
-      width: 100%; padding: 0.95rem 1.4rem;
-      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
-      border-radius: 16px; color: var(--text-primary); font-size: 1rem; font-family: inherit;
-      margin-bottom: 1rem; outline: none;
+      width: 100%; padding: 0.95rem 1.4rem; background: var(--bg-tertiary);
+      border: 1px solid var(--border-glass); border-radius: 16px; color: var(--text-primary);
+      font-size: 1rem; font-family: inherit; margin-bottom: 1rem; outline: none;
       box-shadow: inset 4px 4px 8px rgba(0,0,0,0.5), inset -4px -4px 8px rgba(255,255,255,0.03);
       transition: all 0.3s ease;
     }
     .neu-input::placeholder { color: var(--text-muted); }
     .neu-input:focus { box-shadow: 0 0 0 3px rgba(16,245,165,0.2); background: #2d3748; }
+    .neu-input:disabled { opacity: 0.5; cursor: not-allowed; }
     .neu-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
 
-    /* CLAYMORPHISM BUTTONS */
     .clay-btn {
       position: relative; width: 100%; padding: 1.05rem;
       background: linear-gradient(135deg, var(--accent-green), #0fd98c);
@@ -180,99 +117,20 @@
     }
     .clay-btn:hover { transform: translateY(-2px); box-shadow: var(--glow-green); }
     .clay-btn:active { transform: scale(0.97); }
+    .clay-btn.btn-red {
+      background: linear-gradient(135deg, var(--accent-red), #dc2626);
+      box-shadow: 8px 8px 20px rgba(239,68,68,0.2), inset 4px 4px 8px rgba(255,255,255,0.2);
+    }
+    .clay-btn.btn-red:hover { box-shadow: 0 0 30px rgba(239,68,68,0.4); }
     .clay-btn.secondary { background: var(--bg-tertiary); color: var(--text-primary); box-shadow: none; }
-    .clay-btn.ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-glass); box-shadow: none; }
-    .ripple {
-      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5);
-      transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
-    }
+    .clay-btn.ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-glass); box-shadow: none; font-size: 0.85rem; padding: 0.7rem; }
+    .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5); transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none; }
     @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
-
-    /* STATUS CARD */
-    .status-card {
-      background: linear-gradient(135deg, rgba(16,245,165,0.1), rgba(34,211,238,0.05));
-      border: 1px solid rgba(16,245,165,0.2); border-radius: 18px;
-      padding: 1rem; margin-bottom: 1rem; text-align: center;
-    }
-    .status-dot {
-      width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%;
-      display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--accent-green);
-      animation: pulse 2s infinite;
-    }
-
-    /* ADMIN */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
-    .stat-card {
-      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
-      border-radius: 16px; padding: 0.9rem 0.5rem; text-align: center; transition: all 0.3s ease;
-    }
-    .stat-card:hover { transform: translateY(-2px); border-color: var(--accent-green); }
-    .stat-value {
-      font-size: 1.6rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
-
-    .tabs { display: flex; background: var(--bg-tertiary); border-radius: 14px; padding: 4px; margin-bottom: 1rem; gap: 4px; }
-    .tab {
-      flex: 1; padding: 0.65rem; text-align: center; border-radius: 10px;
-      cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
-      border: none; background: transparent; font-family: inherit; transition: all 0.3s ease;
-    }
-    .tab.active {
-      background: linear-gradient(135deg, var(--accent-green), #0fd98c);
-      color: #0a0e1a; box-shadow: 0 4px 12px rgba(16,245,165,0.3);
-    }
-
-    .calendar { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; }
-    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
-    .calendar-nav {
-      background: var(--bg-secondary); border: 1px solid var(--border-glass);
-      color: var(--text-primary); width: 32px; height: 32px; border-radius: 10px;
-      cursor: pointer; font-size: 1rem; transition: all 0.2s ease;
-    }
-    .calendar-nav:hover { background: var(--accent-green); color: #0a0e1a; }
-    .calendar-month { font-weight: 600; font-size: 0.9rem; }
-    .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
-    .calendar-weekday { font-size: 0.65rem; color: var(--text-muted); padding: 5px 0; font-weight: 600; }
-    .calendar-day {
-      aspect-ratio: 1; display: grid; place-items: center; font-size: 0.78rem;
-      border-radius: 10px; cursor: pointer; color: var(--text-secondary);
-      transition: all 0.2s ease; border: 1px solid transparent;
-    }
-    .calendar-day:hover { background: var(--bg-card); }
-    .calendar-day.today { border: 1px solid var(--accent-green); color: var(--accent-green); font-weight: 700; }
-    .calendar-day.has-data { background: rgba(16,245,165,0.15); color: var(--accent-green); font-weight: 600; }
-    .calendar-day.selected { background: var(--accent-green); color: #0a0e1a; font-weight: 700; box-shadow: var(--glow-green); }
-    .calendar-day.other-month { opacity: 0.35; }
-
-    .admin-card {
-      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
-      border-radius: 14px; padding: 0.9rem 1rem; margin-bottom: 0.65rem;
-      border-left: 4px solid var(--accent-green);
-      display: flex; justify-content: space-between; align-items: center;
-      transition: all 0.2s ease;
-    }
-    .admin-card:hover { transform: translateX(4px); }
-    .admin-card.late { border-left-color: var(--accent-pink); }
-    .admin-card.absent { border-left-color: var(--text-muted); opacity: 0.7; }
-    .admin-info h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
-    .admin-info p { font-size: 0.75rem; color: var(--text-muted); }
-    .admin-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; white-space: nowrap; }
-    .badge-on-time { background: rgba(16,245,165,0.15); color: var(--accent-green); }
-    .badge-late { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
-    .badge-absent { background: rgba(100,116,139,0.15); color: var(--text-muted); }
 
     .status-msg { text-align: center; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; min-height: 22px; }
     .success { color: var(--accent-green); }
     .error { color: var(--accent-pink); }
-
-    .loader {
-      display: none; width: 20px; height: 20px;
-      border: 2px solid rgba(10,14,26,0.2); border-radius: 50%;
-      border-top-color: #0a0e1a; animation: spin 0.8s linear infinite; margin: 0 auto;
-    }
+    .loader { display: none; width: 20px; height: 20px; border: 2px solid rgba(10,14,26,0.2); border-radius: 50%; border-top-color: #0a0e1a; animation: spin 0.8s linear infinite; margin: 0 auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .toast {
@@ -289,84 +147,118 @@
     ::-webkit-scrollbar-track { background: var(--bg-secondary); }
     ::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 10px; }
     .scroll-container { max-height: 360px; overflow-y: auto; padding-right: 5px; }
-    .filter-row { display: flex; gap: 10px; margin-bottom: 1rem; align-items: center; }
-    .filter-row .neu-input { margin-bottom: 0; }
+    .filter-row { display: flex; gap: 10px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
+    .filter-row .neu-input { margin-bottom: 0; flex: 1; min-width: 120px; }
 
-    .skeleton {
-      background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-card) 50%, var(--bg-tertiary) 75%);
-      background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px;
-    }
+    .skeleton { background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-card) 50%, var(--bg-tertiary) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    /* MODAL DE ÉXITO */
+    /* ADMIN */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .stat-card { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 16px; padding: 0.9rem 0.5rem; text-align: center; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
+
+    .tabs { display: flex; background: var(--bg-tertiary); border-radius: 14px; padding: 4px; margin-bottom: 1rem; gap: 3px; flex-wrap: wrap; }
+    .tab { flex: 1; padding: 0.6rem 0.3rem; text-align: center; border-radius: 10px; cursor: pointer; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); border: none; background: transparent; font-family: inherit; transition: all 0.3s ease; min-width: 60px; }
+    .tab.active { background: linear-gradient(135deg, var(--accent-green), #0fd98c); color: #0a0e1a; }
+
+    .calendar { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .calendar-nav { background: var(--bg-secondary); border: 1px solid var(--border-glass); color: var(--text-primary); width: 32px; height: 32px; border-radius: 10px; cursor: pointer; font-size: 1rem; }
+    .calendar-nav:hover { background: var(--accent-green); color: #0a0e1a; }
+    .calendar-month { font-weight: 600; font-size: 0.9rem; }
+    .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+    .calendar-weekday { font-size: 0.65rem; color: var(--text-muted); padding: 5px 0; font-weight: 600; }
+    .calendar-day { aspect-ratio: 1; display: grid; place-items: center; font-size: 0.75rem; border-radius: 10px; cursor: pointer; color: var(--text-secondary); transition: all 0.2s ease; border: 1px solid transparent; position: relative; }
+    .calendar-day:hover { background: var(--bg-card); }
+    .calendar-day.today { border: 1px solid var(--accent-green); color: var(--accent-green); font-weight: 700; }
+    .calendar-day.other-month { opacity: 0.35; }
+    .calendar-day .cal-dot { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; border-radius: 50%; }
+    .cal-dot.green { background: var(--accent-green); }
+    .cal-dot.yellow { background: var(--accent-gold); }
+    .cal-dot.red { background: var(--accent-red); }
+
+    .admin-card {
+      background: var(--bg-tertiary); border: 1px solid var(--border-glass);
+      border-radius: 14px; padding: 0.85rem 1rem; margin-bottom: 0.6rem;
+      border-left: 4px solid var(--accent-green);
+      transition: all 0.2s ease; cursor: default;
+    }
+    .admin-card:hover { transform: translateX(3px); }
+    .admin-card.late { border-left-color: var(--accent-gold); }
+    .admin-card.absent { border-left-color: var(--text-muted); opacity: 0.7; }
+    .admin-card.clickable { cursor: pointer; }
+    .admin-info h3 { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
+    .admin-info p { font-size: 0.73rem; color: var(--text-muted); }
+    .admin-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.63rem; font-weight: 600; text-transform: uppercase; white-space: nowrap; display: inline-block; }
+    .badge-on-time { background: rgba(16,245,165,0.15); color: var(--accent-green); }
+    .badge-late { background: rgba(251,191,36,0.15); color: var(--accent-gold); }
+    .badge-absent { background: rgba(100,116,139,0.15); color: var(--text-muted); }
+    .badge-active { background: rgba(16,245,165,0.15); color: var(--accent-green); }
+    .badge-inactive { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+
+    .sede-group-title { font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); margin: 1rem 0 0.5rem; padding-bottom: 4px; border-bottom: 1px solid var(--border-glass); }
+
+    /* MODAL */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 9999;
-      background: rgba(10,14,26,0.85); backdrop-filter: blur(12px);
+      background: rgba(10,14,26,0.88); backdrop-filter: blur(12px);
       display: none; justify-content: center; align-items: center; padding: 1.5rem;
     }
     .modal-overlay.show { display: flex; animation: modalFadeIn 0.3s ease; }
     @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .modal-card { width: 100%; max-width: 380px; text-align: center; animation: modalPop 0.5s cubic-bezier(0.16,1,0.3,1); }
-    @keyframes modalPop {
-      from { transform: scale(0.8) translateY(30px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-    .success-photo-container { position: relative; width: 140px; height: 140px; margin: 0 auto 1.25rem; }
-    .success-photo-ring {
-      width: 140px; height: 140px; border-radius: 50%; padding: 4px;
-      background: conic-gradient(from 0deg, var(--accent-green), var(--accent-cyan), var(--accent-purple), var(--accent-green));
-      animation: ringRotate 2s linear infinite;
-    }
-    .success-photo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--bg-primary); }
-    .success-photo-placeholder {
-      width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center;
-      background: var(--bg-tertiary); font-size: 3rem; border: 3px solid var(--bg-primary);
-    }
-    .success-check {
-      position: absolute; bottom: -4px; right: -4px; width: 44px; height: 44px; border-radius: 50%;
-      background: var(--accent-green); display: grid; place-items: center;
-      font-size: 1.3rem; color: #0a0e1a; font-weight: 700; border: 3px solid var(--bg-primary);
-      animation: checkPop 0.5s 0.3s cubic-bezier(0.16,1,0.3,1) both; box-shadow: var(--glow-green);
-    }
-    @keyframes checkPop {
-      0% { transform: scale(0) rotate(-180deg); }
-      60% { transform: scale(1.2) rotate(10deg); }
-      100% { transform: scale(1) rotate(0deg); }
-    }
-    .modal-card h2 { font-size: 1.2rem; margin-bottom: 0.2rem; }
-    .modal-name { color: var(--accent-green); font-weight: 700; font-size: 1rem; margin-bottom: 1rem; }
-    .success-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
-    .detail-item { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.75rem; }
-    .detail-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px; }
-    .detail-value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+    .modal-card { width: 100%; max-width: 380px; text-align: center; animation: modalPop 0.4s cubic-bezier(0.16,1,0.3,1); max-height: 90vh; overflow-y: auto; }
+    @keyframes modalPop { from { transform: scale(0.85) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
 
-    /* CONFETTI */
-    .confetti-piece {
-      position: fixed; top: -15px; z-index: 10001; pointer-events: none;
-      animation: confettiFall linear forwards;
+    .success-photo-container { position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; }
+    .success-photo-ring { width: 120px; height: 120px; border-radius: 50%; padding: 3px; border: 3px solid var(--accent-green); box-shadow: var(--glow-green); }
+    .success-photo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--bg-primary); }
+    .success-photo-placeholder { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: var(--bg-tertiary); font-size: 2.5rem; border: 3px solid var(--bg-primary); }
+    .success-check {
+      position: absolute; bottom: -2px; right: -2px; width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-green); display: grid; place-items: center;
+      font-size: 1.1rem; color: #0a0e1a; font-weight: 700; border: 3px solid var(--bg-primary);
+      animation: checkPop 0.4s 0.2s cubic-bezier(0.16,1,0.3,1) both;
     }
-    @keyframes confettiFall {
-      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-      80% { opacity: 1; }
-      100% { transform: translateY(105vh) rotate(720deg) scale(0.5); opacity: 0; }
-    }
+    @keyframes checkPop { 0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+    .modal-card h2 { font-size: 1.15rem; margin-bottom: 0.2rem; }
+    .modal-name { color: var(--accent-green); font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; }
+    .success-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+    .detail-item { background: var(--bg-tertiary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.7rem; }
+    .detail-item.full { grid-column: 1 / -1; }
+    .detail-label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 3px; }
+    .detail-value { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); }
+
+    .confetti-piece { position: fixed; top: -15px; z-index: 10001; pointer-events: none; animation: confettiFall linear forwards; }
+    @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+
+    .change-user { text-align: center; margin-top: 0.75rem; }
+    .change-user a { color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline; }
+    .change-user a:hover { color: var(--accent-pink); }
+
+    .user-detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; text-align: left; }
+    .user-detail-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-green); }
+    .user-detail-photo-ph { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-tertiary); font-size: 1.5rem; border: 2px solid var(--accent-green); }
+    .user-detail-info h3 { font-size: 0.95rem; }
+    .user-detail-info p { font-size: 0.75rem; color: var(--text-muted); }
+    .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .user-stat { background: var(--bg-tertiary); border-radius: 12px; padding: 0.6rem; text-align: center; border: 1px solid var(--border-glass); }
+    .user-stat-val { font-size: 1.3rem; font-weight: 700; }
+    .user-stat-lbl { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
+    .back-btn { background: none; border: none; color: var(--accent-cyan); cursor: pointer; font-size: 0.85rem; font-family: inherit; margin-bottom: 0.75rem; padding: 4px 0; }
+    .back-btn:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-
   <div class="bg-particles" id="particles"></div>
-
   <div id="app">
 
     <!-- ===== VISTA EMPLEADOS ===== -->
     <div id="employee-view" class="view active glass-panel">
-      <div class="logo">
-        <div class="logo-icon">C</div>
-        <h1>Combox <span class="accent">Asistencia</span></h1>
-      </div>
+      <div class="logo"><div class="logo-icon">C</div><h1>Combox <span class="accent">Asistencia</span></h1></div>
       <p class="subtitle">Verificación facial + registro de turno</p>
 
-      <!-- ESCÁNER FACIAL (solo visual, no captura ni envía) -->
       <div class="scanner-wrapper">
         <div class="scanner-container" id="scannerContainer">
           <div class="scanner-ring"></div>
@@ -375,37 +267,12 @@
             <div class="scanner-placeholder" id="scannerPlaceholder" style="display:none;">👤</div>
           </div>
           <div class="scan-line"></div>
-          <div class="scanner-grid"></div>
-          <div class="scanner-corner tl"></div>
-          <div class="scanner-corner tr"></div>
-          <div class="scanner-corner bl"></div>
-          <div class="scanner-corner br"></div>
-          <div class="face-point" style="top:34%;left:36%"></div>
-          <div class="face-point" style="top:34%;left:64%"></div>
-          <div class="face-point" style="top:48%;left:50%"></div>
-          <div class="face-point" style="top:62%;left:40%"></div>
-          <div class="face-point" style="top:62%;left:60%"></div>
-          <div class="face-point" style="top:22%;left:50%"></div>
-          <div class="face-point" style="top:76%;left:50%"></div>
-          <div class="face-point" style="top:34%;left:24%"></div>
-          <div class="face-point" style="top:34%;left:76%"></div>
         </div>
-        <div class="scanner-status" id="scannerStatus">
-          <span class="scanner-dot" id="scannerDot"></span>
-          <span id="scannerText">Iniciando cámara...</span>
-        </div>
+        <div class="scanner-status"><span class="scanner-dot"></span><span id="scannerText">Iniciando cámara...</span></div>
       </div>
 
       <div class="sede-indicator" id="sedeIndicator" style="display:none;">
-        <span>🏢</span>
-        <span id="sedeText">Detectando sede...</span>
-        <span class="sede-dist" id="sedeDist"></span>
-      </div>
-
-      <div class="status-card" id="statusCard" style="display:none;">
-        <span class="status-dot"></span>
-        <span id="statusText">En turno activo</span>
-        <div style="font-size:0.78rem; color: var(--text-secondary); margin-top:5px;" id="statusTime"></div>
+        <span>🏢</span><span id="sedeText"></span><span class="sede-dist" id="sedeDist"></span>
       </div>
 
       <input type="number" id="cedulaInput" class="neu-input" placeholder="Ingresa tu cédula" autocomplete="off" inputmode="numeric">
@@ -415,51 +282,67 @@
         <div class="loader" id="btnLoader"></div>
       </button>
 
+      <div class="change-user" id="changeUserLink" style="display:none;">
+        <a onclick="cambiarUsuario()">Cambiar usuario</a>
+      </div>
+
       <div id="statusMessage" class="status-msg"></div>
     </div>
 
-    <!-- ===== VISTA ADMIN (solo por URL con key) ===== -->
+    <!-- ===== VISTA ADMIN ===== -->
     <div id="admin-view" class="view glass-panel">
-      <div class="logo">
-        <div class="logo-icon" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">⚡</div>
-        <h1>Panel <span class="accent">Admin</span></h1>
-      </div>
-      <p class="subtitle">Gestión de asistencias en tiempo real</p>
+      <div class="logo"><div class="logo-icon" style="background:linear-gradient(135deg,var(--accent-purple),var(--accent-cyan));">⚡</div><h1>Panel <span class="accent">Admin</span></h1></div>
+      <p class="subtitle">Gestión de asistencias</p>
 
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="statPresent">0</div>
-          <div class="stat-label">Presentes</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statLate" style="background:linear-gradient(135deg,var(--accent-pink),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
-          <div class="stat-label">Atrasados</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statTotal" style="background:linear-gradient(135deg,var(--accent-cyan),var(--accent-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
-          <div class="stat-label">Total</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" id="statPresent">0</div><div class="stat-label">Presentes</div></div>
+        <div class="stat-card"><div class="stat-value" id="statLate" style="background:linear-gradient(135deg,var(--accent-gold),var(--accent-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div><div class="stat-label">Atrasados</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTotal" style="background:linear-gradient(135deg,var(--accent-cyan),var(--accent-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div><div class="stat-label">Total</div></div>
       </div>
 
       <div class="tabs">
-        <button class="tab active" data-tab="list" onclick="switchTab('list')">📋 Lista</button>
-        <button class="tab" data-tab="calendar" onclick="switchTab('calendar')">📅 Calendario</button>
+        <button class="tab active" data-tab="hoy" onclick="switchTab('hoy')">📋 Hoy</button>
+        <button class="tab" data-tab="personalizado" onclick="switchTab('personalizado')">📅 Rango</button>
+        <button class="tab" data-tab="usuarios" onclick="switchTab('usuarios')">👥 Usuarios</button>
+        <button class="tab" data-tab="calendario" onclick="switchTab('calendario')">📆 Calendario</button>
       </div>
 
-      <div id="tab-list">
-        <div class="filter-row">
-          <input type="date" class="neu-input" id="dateFilter">
-          <button class="clay-btn" style="width:auto;padding:0 1.25rem;" onclick="cargarDatosAdmin()">🔍</button>
-        </div>
+      <!-- TAB HOY -->
+      <div id="tab-hoy">
         <div class="scroll-container" id="adminDataContainer">
-          <div class="skeleton" style="height:56px;margin-bottom:10px;"></div>
-          <div class="skeleton" style="height:56px;margin-bottom:10px;"></div>
-          <div class="skeleton" style="height:56px;"></div>
+          <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:52px;"></div>
         </div>
         <button class="clay-btn secondary" style="margin-top:1rem;" onclick="exportarCSV()">📥 Exportar CSV</button>
       </div>
 
-      <div id="tab-calendar" style="display:none;">
+      <!-- TAB PERSONALIZADO -->
+      <div id="tab-personalizado" style="display:none;">
+        <div class="filter-row">
+          <input type="date" class="neu-input" id="dateFrom">
+          <input type="date" class="neu-input" id="dateTo">
+          <button class="clay-btn" style="width:auto;padding:0 1.25rem;" onclick="cargarRangoPersonalizado()">🔍</button>
+        </div>
+        <div class="scroll-container" id="rangoContainer">
+          <div style="text-align:center;padding:2rem;color:var(--text-muted);">Selecciona un rango de fechas</div>
+        </div>
+        <button class="clay-btn secondary" style="margin-top:1rem;" onclick="exportarCSVRango()">📥 Exportar CSV</button>
+      </div>
+
+      <!-- TAB USUARIOS -->
+      <div id="tab-usuarios" style="display:none;">
+        <div id="usuariosListView">
+          <div class="scroll-container" id="usuariosContainer">
+            <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
+            <div class="skeleton" style="height:52px;margin-bottom:8px;"></div>
+          </div>
+        </div>
+        <div id="usuarioDetailView" style="display:none;"></div>
+      </div>
+
+      <!-- TAB CALENDARIO -->
+      <div id="tab-calendario" style="display:none;">
         <div class="calendar">
           <div class="calendar-header">
             <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
@@ -468,37 +351,33 @@
           </div>
           <div class="calendar-days" id="calendarDays"></div>
         </div>
-        <div id="calendarDetails" style="color:var(--text-secondary);font-size:0.85rem;text-align:center;">
-          Selecciona un día para ver detalles
+        <div style="display:flex;gap:12px;justify-content:center;font-size:0.7rem;color:var(--text-muted);margin-bottom:0.5rem;">
+          <span>🟢 Normal</span><span>🟡 Tarde/Salida temprana</span><span>🔴 Inasistencia</span>
         </div>
+        <div id="calendarDetails" style="color:var(--text-secondary);font-size:0.82rem;text-align:center;">Selecciona un día</div>
       </div>
-
-      <button class="clay-btn ghost" style="margin-top:1rem;" onclick="logout()">← Cerrar sesión</button>
     </div>
   </div>
 
-  <!-- ===== MODAL DE ÉXITO (foto de cédula del backend) ===== -->
+  <!-- MODAL ÉXITO -->
   <div id="success-modal" class="modal-overlay">
     <div class="modal-card glass-panel">
       <div class="success-photo-container">
         <div class="success-photo-ring">
-          <img id="successPhoto" src="" alt="Foto" style="display:none;">
+          <img id="successPhoto" src="" alt="" style="display:none;">
           <div class="success-photo-placeholder" id="successPhotoPlaceholder">👤</div>
         </div>
         <div class="success-check">✓</div>
       </div>
-      <h2>¡Asistencia Registrada!</h2>
+      <h2 id="successTitle">¡Asistencia Registrada!</h2>
       <p class="modal-name" id="successName"></p>
       <div class="success-details">
-        <div class="detail-item">
-          <span class="detail-label">🏢 Sede</span>
-          <span class="detail-value" id="successSede">-</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">🕐 Hora</span>
-          <span class="detail-value" id="successTime">-</span>
-        </div>
+        <div class="detail-item"><span class="detail-label">🏢 Sede</span><span class="detail-value" id="successSede">-</span></div>
+        <div class="detail-item"><span class="detail-label">🕐 Hora</span><span class="detail-value" id="successTime">-</span></div>
+        <div class="detail-item"><span class="detail-label">📋 Estatus</span><span class="detail-value" id="successEstatus">-</span></div>
+        <div class="detail-item"><span class="detail-label">⏰ Horario</span><span class="detail-value" id="successHorario">-</span></div>
       </div>
+      <button class="clay-btn btn-red" id="btnRegistrarSalida" style="display:none;margin-bottom:0.75rem;" onclick="registrarSalida()">🚪 Registrar Salida</button>
       <button class="clay-btn" onclick="closeSuccessModal()">Continuar</button>
     </div>
   </div>
@@ -506,9 +385,6 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    // ==========================================
-    // CONFIGURACIÓN
-    // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzQyiQH6xTuysmg_w-Zhs1Kk6hzSxfNlEe7MV1syh5eBr9KOWfCRI5uqTniiRttesZx/exec";
     const ADMIN_KEY = "combox2026";
 
@@ -517,26 +393,29 @@
     let currentYear = new Date().getFullYear();
     let calendarData = {};
     let reportCache = {};
-    let scanInterval = null;
+    let rangoCache = [];
+    let lastResponse = null;
 
     // ==========================================
-    // INIT + ROUTING
+    // INIT — ROUTING PRIMERO (rápido para admin)
     // ==========================================
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
       createParticles();
       initRipple();
-      await cargarSedesRemotas();
 
       const params = new URLSearchParams(window.location.search);
-      if (params.get('admin') === 'true' && params.get('key') === ADMIN_KEY) {
+      const isAdmin = params.get('admin') === 'true' && params.get('key') === ADMIN_KEY;
+
+      if (isAdmin) {
         showView('admin-view');
-        document.getElementById('dateFilter').valueAsDate = new Date();
         cargarDatosAdmin();
         cargarReporteMensual();
+        cargarUsuarios();
       } else {
         showView('employee-view');
         initCamera();
-        startScanSimulation();
+        cargarSedesRemotas();
+        restaurarCedulaCache();
       }
     });
 
@@ -551,35 +430,28 @@
     function createParticles() {
       const c = document.getElementById('particles');
       const colors = ['var(--accent-green)','var(--accent-cyan)','var(--accent-purple)'];
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random()*100+'%';
-        p.style.animationDelay = Math.random()*18+'s';
+      for (let i = 0; i < 10; i++) {
+        const p = document.createElement('div'); p.className = 'particle';
+        p.style.left = Math.random()*100+'%'; p.style.animationDelay = Math.random()*18+'s';
         p.style.animationDuration = (12+Math.random()*10)+'s';
         p.style.background = colors[Math.floor(Math.random()*colors.length)];
         c.appendChild(p);
       }
     }
-
     function initRipple() {
       document.addEventListener('click', e => {
         const btn = e.target.closest('.clay-btn');
         if (!btn) return;
-        const r = document.createElement('span');
-        const rect = btn.getBoundingClientRect();
+        const r = document.createElement('span'); const rect = btn.getBoundingClientRect();
         const s = Math.max(rect.width, rect.height);
-        r.className = 'ripple';
-        r.style.width = r.style.height = s+'px';
-        r.style.left = (e.clientX-rect.left-s/2)+'px';
-        r.style.top = (e.clientY-rect.top-s/2)+'px';
-        btn.appendChild(r);
-        setTimeout(() => r.remove(), 600);
+        r.className = 'ripple'; r.style.width = r.style.height = s+'px';
+        r.style.left = (e.clientX-rect.left-s/2)+'px'; r.style.top = (e.clientY-rect.top-s/2)+'px';
+        btn.appendChild(r); setTimeout(() => r.remove(), 600);
       });
     }
 
     // ==========================================
-    // CÁMARA EN VIVO (solo visual, NO captura)
+    // CÁMARA (inicio inmediato)
     // ==========================================
     async function initCamera() {
       const video = document.getElementById('scannerVideo');
@@ -587,39 +459,45 @@
       const txt = document.getElementById('scannerText');
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 400 }, height: { ideal: 400 } },
-          audio: false
+          video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 320 } }, audio: false
         });
         video.srcObject = stream;
         await video.play();
-        txt.textContent = 'Escaneando rostro...';
+        txt.textContent = 'Cámara activa';
+        localStorage.setItem('combox_cam_ok', '1');
       } catch (err) {
-        video.style.display = 'none';
-        ph.style.display = 'grid';
+        video.style.display = 'none'; ph.style.display = 'grid';
         txt.textContent = '⚠ Cámara no disponible';
-        document.getElementById('scannerDot').style.background = 'var(--accent-pink)';
       }
     }
 
-    function startScanSimulation() {
-      const container = document.getElementById('scannerContainer');
-      const status = document.getElementById('scannerStatus');
-      const txt = document.getElementById('scannerText');
-
-      scanInterval = setInterval(() => {
-        container.classList.add('detected');
-        status.classList.add('active');
-        txt.textContent = '✓ Rostro detectado';
-        setTimeout(() => {
-          container.classList.remove('detected');
-          status.classList.remove('active');
-          txt.textContent = 'Escaneando rostro...';
-        }, 2000);
-      }, 4500);
+    // ==========================================
+    // CÉDULA EN CACHÉ
+    // ==========================================
+    function restaurarCedulaCache() {
+      const cached = localStorage.getItem('combox_cedula');
+      if (cached) {
+        document.getElementById('cedulaInput').value = cached;
+        document.getElementById('cedulaInput').disabled = true;
+        document.getElementById('changeUserLink').style.display = 'block';
+      }
+    }
+    function guardarCedulaCache(cedula) {
+      localStorage.setItem('combox_cedula', cedula);
+      document.getElementById('cedulaInput').value = cedula;
+      document.getElementById('cedulaInput').disabled = true;
+      document.getElementById('changeUserLink').style.display = 'block';
+    }
+    function cambiarUsuario() {
+      localStorage.removeItem('combox_cedula');
+      localStorage.removeItem('combox_usuario');
+      document.getElementById('cedulaInput').value = '';
+      document.getElementById('cedulaInput').disabled = false;
+      document.getElementById('changeUserLink').style.display = 'none';
     }
 
     // ==========================================
-    // SEDES REMOTAS
+    // SEDES
     // ==========================================
     async function cargarSedesRemotas() {
       try {
@@ -627,36 +505,27 @@
         const data = await res.json();
         if (data.success && data.sedes) SEDES = data.sedes;
       } catch (e) {
-        console.warn('Sedes remotas no disponibles, usando fallback');
         SEDES = [
           { id: 'Naguanagua, Las Quintas', nombre: 'Naguanagua, Las Quintas', lat: 10.2485928, lng: -68.0102189, radio: 50 },
           { id: 'Av Bolivar, Norte', nombre: 'Av Bolivar, Norte', lat: 10.2078442, lng: -68.0073244, radio: 50 }
         ];
       }
     }
-
     function calcularDistancia(lat1, lng1, lat2, lng2) {
-      const R = 6371;
-      const dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+      const R = 6371; const dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
       const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
       return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     }
-
     function detectarSedeCercana(lat, lng) {
       if (!SEDES.length) return null;
       let cercana = null, distMin = Infinity;
-      SEDES.forEach(s => {
-        const d = calcularDistancia(lat, lng, s.lat, s.lng);
-        if (d < distMin) { distMin = d; cercana = { ...s, distancia: d }; }
-      });
+      SEDES.forEach(s => { const d = calcularDistancia(lat, lng, s.lat, s.lng); if (d < distMin) { distMin = d; cercana = { ...s, distancia: d }; } });
       return cercana;
     }
-
     function mostrarSedeUI(nombre, distancia) {
       document.getElementById('sedeIndicator').style.display = 'flex';
       document.getElementById('sedeText').textContent = `Sede: ${nombre}`;
-      document.getElementById('sedeDist').textContent =
-        distancia < 1 ? `${Math.round(distancia*1000)} m` : `${distancia.toFixed(1)} km`;
+      document.getElementById('sedeDist').textContent = distancia < 1 ? `${Math.round(distancia*1000)} m` : `${distancia.toFixed(1)} km`;
     }
 
     // ==========================================
@@ -669,144 +538,109 @@
       setTimeout(() => t.classList.add('show'), 10);
       setTimeout(() => t.classList.remove('show'), 3000);
     }
-
     function mostrarMensaje(texto, clase) {
-      const m = document.getElementById('statusMessage');
-      m.textContent = texto;
-      m.className = 'status-msg ' + clase;
+      const m = document.getElementById('statusMessage'); m.textContent = texto; m.className = 'status-msg ' + clase;
     }
-
-    function mostrarEstadoActivo(msg) {
-      document.getElementById('statusCard').style.display = 'block';
-      document.getElementById('statusText').textContent = msg || 'En turno activo';
-      document.getElementById('statusTime').textContent =
-        new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    }
-
     function finalizarCarga() {
       document.getElementById('btnText').style.display = 'block';
       document.getElementById('btnLoader').style.display = 'none';
     }
 
     // ==========================================
-    // MARCAR ASISTENCIA (SIN foto en payload)
+    // MARCAR ASISTENCIA
     // ==========================================
     async function marcarAsistencia() {
       const cedula = document.getElementById('cedulaInput').value.trim();
-      const btnText = document.getElementById('btnText');
-      const btnLoader = document.getElementById('btnLoader');
-
       if (!cedula) { showToast('Ingresa tu cédula', 'error'); return; }
 
-      btnText.style.display = 'none';
-      btnLoader.style.display = 'block';
+      document.getElementById('btnText').style.display = 'none';
+      document.getElementById('btnLoader').style.display = 'block';
       mostrarMensaje('📡 Obteniendo GPS...', '');
 
-      if (!navigator.geolocation) {
-        finalizarCarga();
-        showToast('GPS no soportado', 'error');
-        return;
-      }
+      if (!navigator.geolocation) { finalizarCarga(); showToast('GPS no soportado', 'error'); return; }
 
       navigator.geolocation.getCurrentPosition(async (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
+        const lat = pos.coords.latitude, lng = pos.coords.longitude;
         const sede = detectarSedeCercana(lat, lng);
         if (sede) mostrarSedeUI(sede.nombre, sede.distancia);
-
         mostrarMensaje('⏳ Registrando...', '');
 
-        const payload = {
-          action: "marcar",
-          cedula: cedula,
-          latitud: lat,
-          longitud: lng,
-          sede: sede ? sede.nombre : '',
-          sedeId: sede ? sede.id : null
-        };
+        const payload = { action: "marcar", cedula, latitud: lat, longitud: lng, sede: sede ? sede.nombre : '', sedeId: sede ? sede.id : null };
 
         try {
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-          });
+          const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
           const data = await res.json();
           finalizarCarga();
 
           if (data.success) {
-            document.getElementById('cedulaInput').value = '';
-            mostrarEstadoActivo(data.message);
+            guardarCedulaCache(cedula);
+            lastResponse = data;
+            localStorage.setItem('combox_usuario', JSON.stringify(data));
             showSuccessModal(data);
-            launchConfetti();
+            if (data.tipo === 'entrada') launchConfetti();
           } else {
-            showToast(data.message, 'error');
-            mostrarMensaje(data.message, 'error');
+            showToast(data.message, 'error'); mostrarMensaje(data.message, 'error');
           }
         } catch (e) {
-          finalizarCarga();
-          mostrarEstadoActivo('Asistencia registrada');
-          showSuccessModal({ message: 'Registrado (sin conexión)', sede: sede ? sede.nombre : '' });
-          launchConfetti();
+          finalizarCarga(); showToast('Error de conexión', 'error');
         }
-      }, () => {
-        finalizarCarga();
-        showToast('Permite el acceso al GPS', 'error');
-      }, { enableHighAccuracy: true, timeout: 15000 });
+      }, () => { finalizarCarga(); showToast('Permite el acceso al GPS', 'error'); },
+      { enableHighAccuracy: true, timeout: 15000 });
+    }
+
+    function registrarSalida() {
+      closeSuccessModal();
+      setTimeout(() => marcarAsistencia(), 300);
     }
 
     // ==========================================
-    // MODAL DE ÉXITO (solo foto de cédula del backend)
+    // MODAL DE ÉXITO
     // ==========================================
     function showSuccessModal(data) {
-      const modal = document.getElementById('success-modal');
       const photo = document.getElementById('successPhoto');
       const placeholder = document.getElementById('successPhotoPlaceholder');
-
       const fotoUrl = data.foto_cedula || '';
-      const esUrlValida = fotoUrl.startsWith('http://') || fotoUrl.startsWith('https://');
 
-      if (esUrlValida) {
-        photo.src = fotoUrl;
-        photo.style.display = 'block';
-        placeholder.style.display = 'none';
+      if (fotoUrl.startsWith('http')) { photo.src = fotoUrl; photo.style.display = 'block'; placeholder.style.display = 'none'; }
+      else { photo.style.display = 'none'; placeholder.style.display = 'grid'; }
+
+      document.getElementById('successTitle').textContent = data.tipo === 'salida' ? '¡Salida Registrada!' : '¡Entrada Registrada!';
+      document.getElementById('successName').textContent = data.nombre || 'Empleado';
+      document.getElementById('successSede').textContent = data.sede || '-';
+      document.getElementById('successTime').textContent = data.hora || new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('successEstatus').textContent = data.estatus || '-';
+      document.getElementById('successHorario').textContent =
+        (data.hora_asignada_entrada || '--:--') + ' - ' + (data.hora_asignada_salida || '--:--');
+
+      // Botón de salida: solo si es entrada Y la hora actual es antes de la salida asignada
+      const btnSalida = document.getElementById('btnRegistrarSalida');
+      if (data.tipo === 'entrada' && data.hora_asignada_salida) {
+        const ahora = new Date();
+        const [h, m] = data.hora_asignada_salida.split(':').map(Number);
+        const horaSalida = new Date(); horaSalida.setHours(h, m, 0, 0);
+        btnSalida.style.display = ahora < horaSalida ? 'block' : 'none';
       } else {
-        photo.style.display = 'none';
-        placeholder.style.display = 'grid';
+        btnSalida.style.display = 'none';
       }
 
-      document.getElementById('successName').textContent = data.nombre || data.message || 'Empleado';
-      document.getElementById('successSede').textContent = data.sede || 'Sin sede';
-      document.getElementById('successTime').textContent =
-        data.hora || new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
-      modal.classList.add('show');
-      setTimeout(() => closeSuccessModal(), 7000);
+      document.getElementById('success-modal').classList.add('show');
     }
-
-    function closeSuccessModal() {
-      document.getElementById('success-modal').classList.remove('show');
-    }
+    function closeSuccessModal() { document.getElementById('success-modal').classList.remove('show'); }
 
     // ==========================================
     // CONFETTI
     // ==========================================
     function launchConfetti() {
-      const colors = ['#10f5a5','#22d3ee','#a855f7','#ec4899','#fbbf24','#f87171','#34d399','#818cf8'];
-      const shapes = ['square','circle','strip'];
-      for (let i = 0; i < 120; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti-piece';
-        const shape = shapes[Math.floor(Math.random()*shapes.length)];
+      const colors = ['#10f5a5','#22d3ee','#a855f7','#ec4899','#fbbf24','#f87171','#34d399'];
+      for (let i = 0; i < 100; i++) {
+        const c = document.createElement('div'); c.className = 'confetti-piece';
         const size = 6 + Math.random()*10;
         c.style.left = Math.random()*100+'vw';
         c.style.background = colors[Math.floor(Math.random()*colors.length)];
         c.style.animationDelay = Math.random()*0.8+'s';
         c.style.animationDuration = (2.5+Math.random()*2.5)+'s';
-        if (shape === 'circle') { c.style.width = c.style.height = size+'px'; c.style.borderRadius = '50%'; }
-        else if (shape === 'strip') { c.style.width = size*0.4+'px'; c.style.height = size*1.5+'px'; c.style.borderRadius = '2px'; }
-        else { c.style.width = c.style.height = size+'px'; c.style.borderRadius = '2px'; }
+        c.style.width = c.style.height = size+'px';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 5500);
       }
@@ -818,63 +652,186 @@
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById('tab-list').style.display = tab === 'list' ? 'block' : 'none';
-      document.getElementById('tab-calendar').style.display = tab === 'calendar' ? 'block' : 'none';
-      if (tab === 'calendar') renderCalendar();
+      ['hoy','personalizado','usuarios','calendario'].forEach(t => {
+        document.getElementById('tab-'+t).style.display = t === tab ? 'block' : 'none';
+      });
+      if (tab === 'calendario') renderCalendar();
+      if (tab === 'usuarios') { document.getElementById('usuariosListView').style.display = 'block'; document.getElementById('usuarioDetailView').style.display = 'none'; }
     }
+
+    function dosNombres(nombre) { return (nombre || '').split(' ').slice(0, 2).join(' '); }
 
     async function cargarDatosAdmin() {
       const container = document.getElementById('adminDataContainer');
-      const date = document.getElementById('dateFilter').value || new Date().toISOString().split('T')[0];
-
-      container.innerHTML = `
-        <div class="skeleton" style="height:56px;margin-bottom:10px;"></div>
-        <div class="skeleton" style="height:56px;margin-bottom:10px;"></div>
-        <div class="skeleton" style="height:56px;"></div>`;
+      const date = new Date().toISOString().split('T')[0];
+      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
 
       try {
         const res = await fetch(`${API_URL}?action=getReport&date=${date}`);
         const data = await res.json();
-        if (data.success && data.records) {
-          renderReport(data.records);
-          reportCache[date] = data.records;
-        } else {
-          container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">📭 No hay registros</div>`;
-        }
-      } catch (e) {
-        container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error al conectar</div>`;
-      }
+        if (data.success && data.records) { renderReport(data.records, container); reportCache[date] = data.records; }
+        else { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">📭 No hay registros hoy</div>`; }
+      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error al conectar</div>`; }
     }
 
-    function renderReport(records) {
-      const container = document.getElementById('adminDataContainer');
+    function renderReport(records, container) {
       const present = records.filter(r => r.entrada).length;
       const late = records.filter(r => r.estado === 'late').length;
-
       document.getElementById('statPresent').textContent = present;
       document.getElementById('statLate').textContent = late;
       document.getElementById('statTotal').textContent = records.length;
 
-      if (!records.length) {
-        container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`;
-        return;
-      }
+      if (!records.length) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`; return; }
 
       container.innerHTML = records.map(r => {
         const bc = r.estado === 'late' ? 'badge-late' : r.estado === 'absent' ? 'badge-absent' : 'badge-on-time';
         const bt = r.estado === 'late' ? 'Atrasado' : r.estado === 'absent' ? 'Ausente' : 'A Tiempo';
         const cc = r.estado === 'late' ? 'late' : r.estado === 'absent' ? 'absent' : '';
-        return `
-          <div class="admin-card ${cc}">
-            <div class="admin-info">
-              <h3>${r.nombre}</h3>
-              <p>${r.sede || ''} · In: ${r.entrada || '--:--'} · Out: ${r.salida || '--:--'}</p>
-            </div>
-            <div class="admin-badge ${bc}">${bt}</div>
-          </div>`;
+        return `<div class="admin-card ${cc}">
+          <div class="admin-info">
+            <h3>${dosNombres(r.nombre)}</h3>
+            <p>Entrada: ${r.entrada || '--:--'} &nbsp;|&nbsp; Salida: ${r.salida || '--:--'}</p>
+          </div>
+          <div class="admin-badge ${bc}">${bt}</div>
+        </div>`;
       }).join('');
     }
 
+    // RANGO PERSONALIZADO
+    async function cargarRangoPersonalizado() {
+      const from = document.getElementById('dateFrom').value;
+      const to = document.getElementById('dateTo').value;
+      const container = document.getElementById('rangoContainer');
+      if (!from || !to) { showToast('Selecciona ambas fechas', 'error'); return; }
+
+      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div><div class="skeleton" style="height:52px;"></div>`;
+
+      try {
+        const res = await fetch(`${API_URL}?action=getReportRango&from=${from}&to=${to}`);
+        const data = await res.json();
+        if (data.success && data.records && data.records.length) {
+          rangoCache = data.records;
+          container.innerHTML = data.records.map(r => {
+            const bc = r.estado === 'late' ? 'badge-late' : r.estado === 'absent' ? 'badge-absent' : 'badge-on-time';
+            const bt = r.estado === 'late' ? 'Atrasado' : r.estado === 'absent' ? 'Ausente' : 'A Tiempo';
+            const cc = r.estado === 'late' ? 'late' : r.estado === 'absent' ? 'absent' : '';
+            return `<div class="admin-card ${cc}">
+              <div class="admin-info"><h3>${dosNombres(r.nombre)} <span style="font-size:0.65rem;color:var(--text-muted)">${r.fecha || ''}</span></h3>
+              <p>Entrada: ${r.entrada || '--:--'} | Salida: ${r.salida || '--:--'}</p></div>
+              <div class="admin-badge ${bc}">${bt}</div></div>`;
+          }).join('');
+        } else { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros en el rango</div>`; }
+      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; }
+    }
+
+    // USUARIOS
+    async function cargarUsuarios() {
+      const container = document.getElementById('usuariosContainer');
+      try {
+        const res = await fetch(`${API_URL}?action=getUsuarios`);
+        const data = await res.json();
+        if (data.success && data.usuarios) {
+          const porSede = {};
+          data.usuarios.forEach(u => {
+            const sede = u.sede || 'Sin sede';
+            if (!porSede[sede]) porSede[sede] = [];
+            porSede[sede].push(u);
+          });
+
+          let html = '';
+          Object.keys(porSede).sort().forEach(sede => {
+            html += `<div class="sede-group-title">🏢 ${sede} (${porSede[sede].length})</div>`;
+            porSede[sede].forEach(u => {
+              const est = String(u.estatus).toLowerCase() === 'activo' ? 'badge-active' : 'badge-inactive';
+              const estTxt = u.estatus === 'activo' ? 'Activo' : 'Inactivo';
+              html += `<div class="admin-card clickable" onclick="verDetalleUsuario('${u.cedula}')">
+                <div class="admin-info"><h3>${dosNombres(u.nombre_trabajador)}</h3><p>${u.cedula}</p></div>
+                <div class="admin-badge ${est}">${estTxt}</div></div>`;
+            });
+          });
+          container.innerHTML = html || `<div style="text-align:center;padding:2rem;color:var(--text-muted)">No hay usuarios</div>`;
+        }
+      } catch (e) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; }
+    }
+
+    async function verDetalleUsuario(cedula) {
+      document.getElementById('usuariosListView').style.display = 'none';
+      const detail = document.getElementById('usuarioDetailView');
+      detail.style.display = 'block';
+      detail.innerHTML = `<div class="skeleton" style="height:200px;"></div>`;
+
+      try {
+        const res = await fetch(`${API_URL}?action=getDetalleUsuario&cedula=${cedula}`);
+        const data = await res.json();
+        if (!data.success) { detail.innerHTML = `<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">Error al cargar</p>`; return; }
+
+        const u = data.usuario;
+        const stats = data.stats;
+        const fotoUrl = u.foto_cedula || '';
+        const fotoHtml = fotoUrl.startsWith('http')
+          ? `<img class="user-detail-photo" src="${fotoUrl}" alt="">`
+          : `<div class="user-detail-photo-ph">👤</div>`;
+
+        let calHtml = renderMiniCalendario(data.registros);
+
+        let registrosHtml = (data.registros || []).slice(-20).reverse().map(r => {
+          const dot = r.estado === 'late' ? '🟡' : r.estado === 'absent' ? '🔴' : '🟢';
+          return `<div class="admin-card" style="border-left-color:${r.estado==='late'?'var(--accent-gold)':r.estado==='absent'?'var(--text-muted)':'var(--accent-green)'}">
+            <div class="admin-info"><h3>${dot} ${r.fecha}</h3>
+            <p>Entrada: ${r.entrada || '--:--'} | Salida: ${r.salida || '--:--'}</p></div>
+            <div class="admin-badge ${r.estado==='late'?'badge-late':r.estado==='absent'?'badge-absent':'badge-on-time'}">${r.estado==='late'?'Tarde':r.estado==='absent'?'Ausente':'OK'}</div></div>`;
+        }).join('');
+
+        detail.innerHTML = `
+          <button class="back-btn" onclick="volverUsuarios()">← Volver a usuarios</button>
+          <div class="user-detail-header">${fotoHtml}
+            <div class="user-detail-info"><h3>${u.nombre_trabajador}</h3>
+            <p>${u.sede || 'Sin sede'} · ${u.estatus} · C.I: ${u.cedula}</p>
+            <p style="font-size:0.7rem;color:var(--accent-cyan);">Horario: ${u.horario_nombre || 'N/A'}</p></div>
+          </div>
+          <div class="user-stats">
+            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-green)">${stats.asistencias}</div><div class="user-stat-lbl">Asistencias</div></div>
+            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-gold)">${stats.atrasos}</div><div class="user-stat-lbl">Atrasos</div></div>
+            <div class="user-stat"><div class="user-stat-val" style="color:var(--accent-red)">${stats.inasistencias}</div><div class="user-stat-lbl">Inasistencias</div></div>
+          </div>
+          <h3 style="font-size:0.85rem;margin-bottom:0.5rem;">📆 Calendario de registros</h3>
+          ${calHtml}
+          <h3 style="font-size:0.85rem;margin:1rem 0 0.5rem;">📋 Últimos registros</h3>
+          <div class="scroll-container" style="max-height:250px;">${registrosHtml || '<p style="color:var(--text-muted)">Sin registros</p>'}</div>`;
+      } catch (e) { detail.innerHTML = `<button class="back-btn" onclick="volverUsuarios()">← Volver</button><p style="color:var(--accent-pink)">⚠ Error de conexión</p>`; }
+    }
+
+    function volverUsuarios() {
+      document.getElementById('usuariosListView').style.display = 'block';
+      document.getElementById('usuarioDetailView').style.display = 'none';
+    }
+
+    function renderMiniCalendario(registros) {
+      const now = new Date();
+      const y = now.getFullYear(), m = now.getMonth();
+      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      const weekdays = ['D','L','M','X','J','V','S'];
+      const firstDay = new Date(y, m, 1).getDay();
+      const daysInMonth = new Date(y, m+1, 0).getDate();
+
+      const regMap = {};
+      (registros || []).forEach(r => { regMap[r.fecha] = r.estado; });
+
+      let html = `<div class="calendar" style="margin-bottom:0.5rem;"><div style="text-align:center;font-weight:600;font-size:0.85rem;margin-bottom:0.5rem;">${months[m]} ${y}</div><div class="calendar-days">`;
+      html += weekdays.map(w => `<div class="calendar-weekday">${w}</div>`).join('');
+      for (let i = 0; i < firstDay; i++) html += `<div></div>`;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const estado = regMap[ds];
+        const dotColor = estado === 'late' ? 'yellow' : estado === 'absent' ? 'red' : estado ? 'green' : '';
+        const isToday = d === now.getDate();
+        html += `<div class="calendar-day${isToday?' today':''}">${d}${dotColor ? `<span class="cal-dot ${dotColor}"></span>` : ''}</div>`;
+      }
+      html += `</div></div>`;
+      return html;
+    }
+
+    // CALENDARIO GENERAL
     async function cargarReporteMensual() {
       try {
         const res = await fetch(`${API_URL}?action=getReporteMensual&month=${currentMonth+1}&year=${currentYear}`);
@@ -887,7 +844,6 @@
       const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
       const weekdays = ['D','L','M','X','J','V','S'];
       document.getElementById('calendarMonth').textContent = `${months[currentMonth]} ${currentYear}`;
-
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
       const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
       const daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
@@ -899,18 +855,25 @@
       for (let d = 1; d <= daysInMonth; d++) {
         const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
         const isToday = today.getDate()===d && today.getMonth()===currentMonth && today.getFullYear()===currentYear;
-        let cls = 'calendar-day';
-        if (isToday) cls += ' today';
-        if (calendarData[ds]) cls += ' has-data';
-        html += `<div class="${cls}" onclick="selectDate('${ds}')">${d}</div>`;
+        const info = calendarData[ds];
+        let dotHtml = '';
+        if (info) {
+          const color = info.has_late ? 'yellow' : info.has_absent ? 'red' : 'green';
+          dotHtml = `<span class="cal-dot ${color}"></span>`;
+        }
+        html += `<div class="calendar-day${isToday?' today':''}" onclick="selectDate('${ds}')">${d}${dotHtml}</div>`;
       }
       document.getElementById('calendarDays').innerHTML = html;
     }
 
     function selectDate(ds) {
-      document.getElementById('dateFilter').value = ds;
-      switchTab('list');
-      cargarDatosAdmin();
+      switchTab('hoy');
+      const container = document.getElementById('adminDataContainer');
+      container.innerHTML = `<div class="skeleton" style="height:52px;margin-bottom:8px;"></div>`;
+      fetch(`${API_URL}?action=getReport&date=${ds}`).then(r => r.json()).then(data => {
+        if (data.success && data.records) { renderReport(data.records, container); reportCache[ds] = data.records; }
+        else container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted)">Sin registros</div>`;
+      }).catch(() => { container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent-pink)">⚠ Error</div>`; });
     }
 
     function changeMonth(delta) {
@@ -918,25 +881,26 @@
       if (currentMonth > 11) { currentMonth = 0; currentYear++; }
       if (currentMonth < 0) { currentMonth = 11; currentYear--; }
       cargarReporteMensual();
-      renderCalendar();
     }
 
     function exportarCSV() {
-      const date = document.getElementById('dateFilter').value;
+      const date = new Date().toISOString().split('T')[0];
       const records = reportCache[date];
       if (!records || !records.length) { showToast('No hay datos', 'error'); return; }
-      const headers = ['Nombre','Sede','Entrada','Salida','Estado'];
-      const rows = records.map(r => [r.nombre, r.sede||'', r.entrada||'', r.salida||'', r.estado]);
+      descargarCSV(records, `asistencia_${date}`);
+    }
+    function exportarCSVRango() {
+      if (!rangoCache.length) { showToast('No hay datos del rango', 'error'); return; }
+      descargarCSV(rangoCache, `asistencia_rango`);
+    }
+    function descargarCSV(records, nombre) {
+      const headers = ['Nombre','Sede','Fecha','Entrada','Salida','Estado'];
+      const rows = records.map(r => [r.nombre, r.sede||'', r.fecha||'', r.entrada||'', r.salida||'', r.estado]);
       const csv = headers.join(',') + '\n' + rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
       const blob = new Blob(['\ufeff'+csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `asistencia_${date}.csv`;
-      a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre+'.csv'; a.click();
       showToast('CSV descargado');
     }
-
-    function logout() { window.location.href = window.location.pathname; }
   </script>
 </body>
 </html>
